@@ -23,11 +23,18 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Instalar dependencias (reproducible)
         run: npm ci
+
+      - name: Versión coherente (VERSION, package.json y CHANGELOG)
+        run: |
+          VERSION=$(tr -d '[:space:]' < VERSION)
+          PAQUETE=$(node -p "require('./package.json').version")
+          if [ "$VERSION" != "$PAQUETE" ]; then echo "::error::VERSION ($VERSION) y package.json ($PAQUETE) no coinciden"; exit 1; fi
+          grep -q "^## \[$VERSION\]" CHANGELOG.md || { echo "::error::CHANGELOG.md no tiene la sección [$VERSION]"; exit 1; }
 
       - name: Calidad (ESLint)
         run: npm run lint

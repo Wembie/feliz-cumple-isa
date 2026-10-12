@@ -12,7 +12,7 @@ export const CANDADO: TextosCandado = {
   titulo: 'Tu regalo está cerrado con llave OJO PUESS DONDE NO LA SEPA',
   texto: 'Escribe la palabra secreta para abrirlo....AY ISABELLA',
   /** Pista opcional ('' = sin pista). */
-  pista: 'Es algo que te gusta y no lo has probado JAJHAJAJAJAJA',
+  pista: 'Es algo que te gusta y no lo has probado JAJHAJAJAJAJA (y poner en minuscula)',
   campo: 'Palabra secreta :)',
   mostrar: 'Mostrar QK',
   ocultar: 'Ocultar QK',
