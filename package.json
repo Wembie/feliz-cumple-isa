@@ -1,7 +1,7 @@
 {
   "name": "feliz-cumple-isa",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "A one-of-a-kind interactive birthday experience made with love for Isa.",
   "scripts": {
@@ -15,7 +15,8 @@
     "estres": "vite build --mode estres && node scripts/estres.mjs",
     "estres:real": "vite build --mode real && node scripts/estres.mjs dist-real",
     "cifrar": "tsx scripts/cifrar.ts",
-    "build:prueba": "vite build --mode prueba && tsx scripts/cifrar.ts --prueba"
+    "build:prueba": "vite build --mode prueba && tsx scripts/cifrar.ts --prueba",
+    "vista-previa": "tsx scripts/vista-previa.ts"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",

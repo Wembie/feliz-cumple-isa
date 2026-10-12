@@ -4,6 +4,7 @@ import { extname, join, normalize, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, type Plugin } from 'vitest/config'
 import react from '@vitejs/plugin-react'
+import { VISTA_PREVIA } from './src/vistaPrevia'
 
 const raiz = (ruta: string) => fileURLToPath(new URL(ruta, import.meta.url))
 
@@ -96,6 +97,49 @@ function cifradoAutomaticoEnDesarrollo(activo: boolean): Plugin {
 }
 
 /** Al construir para publicar: avisa si tus textos cambiaron después del último `npm run cifrar`. */
+/**
+ * Título, descripción e imagen que se ven al compartir el enlace (WhatsApp, Telegram…).
+ * Los textos salen de src/vistaPrevia.ts; la imagen, de `npm run vista-previa`.
+ */
+function vistaPrevia(): Plugin {
+  const v = VISTA_PREVIA
+  const meta = (atributo: 'name' | 'property', clave: string, valor: string) => ({
+    tag: 'meta',
+    attrs: { [atributo]: clave, content: valor },
+    injectTo: 'head' as const,
+  })
+  const imagen = `${v.url}vista-previa.png`
+  return {
+    name: 'vista-previa',
+    transformIndexHtml: {
+      order: 'pre',
+      handler: (html) => ({
+        html: html.replace(/<title>.*?<\/title>/, () => `<title>${v.titulo.replace(/</g, '&lt;')}</title>`),
+        tags: [
+          meta('name', 'description', v.descripcion),
+          meta('name', 'theme-color', v.color),
+          meta('property', 'og:type', 'website'),
+          meta('property', 'og:locale', 'es_ES'),
+          meta('property', 'og:site_name', v.nombreSitio),
+          meta('property', 'og:url', v.url),
+          meta('property', 'og:title', v.titulo),
+          meta('property', 'og:description', v.descripcion),
+          meta('property', 'og:image', imagen),
+          meta('property', 'og:image:secure_url', imagen),
+          meta('property', 'og:image:type', 'image/png'),
+          meta('property', 'og:image:width', '1200'),
+          meta('property', 'og:image:height', '630'),
+          meta('property', 'og:image:alt', v.imagen.alt),
+          meta('name', 'twitter:card', 'summary_large_image'),
+          meta('name', 'twitter:title', v.titulo),
+          meta('name', 'twitter:description', v.descripcion),
+          meta('name', 'twitter:image', imagen),
+        ],
+      }),
+    },
+  }
+}
+
 function avisoCifradoDesactualizado(): Plugin {
   return {
     name: 'aviso-cifrado-desactualizado',
@@ -120,7 +164,7 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     base: '/feliz-cumple-isa/',
-    plugins: [react(), fotosPrivadasEnDesarrollo(), cifradoAutomaticoEnDesarrollo(conCandadoEnDesarrollo), avisoCifradoDesactualizado()],
+    plugins: [react(), vistaPrevia(), fotosPrivadasEnDesarrollo(), cifradoAutomaticoEnDesarrollo(conCandadoEnDesarrollo), avisoCifradoDesactualizado()],
     resolve: {
       alias: [
         { find: '@constantes-2026', replacement: constantes },
