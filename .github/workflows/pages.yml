@@ -1,9 +1,9 @@
 name: Publicar en GitHub Pages
 
+# Las revisiones ya corrieron en el PR (ci.yml). Aquí solo se construye, se publica y se crea el release.
 on:
   push:
     branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -12,11 +12,11 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  verificar-y-construir:
+  construir:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,48 +29,20 @@ jobs:
       - name: Instalar dependencias (reproducible)
         run: npm ci
 
-      - name: Versión coherente (VERSION, package.json y CHANGELOG)
+      - name: Nada personal sin cifrar en lo que se publica
         run: |
-          VERSION=$(tr -d '[:space:]' < VERSION)
-          PAQUETE=$(node -p "require('./package.json').version")
-          if [ "$VERSION" != "$PAQUETE" ]; then echo "::error::VERSION ($VERSION) y package.json ($PAQUETE) no coinciden"; exit 1; fi
-          grep -q "^## \[$VERSION\]" CHANGELOG.md || { echo "::error::CHANGELOG.md no tiene la sección [$VERSION]"; exit 1; }
-
-      - name: Calidad (ESLint)
-        run: npm run lint
-
-      - name: Tipos de TypeScript
-        run: npm run typecheck
-
-      - name: Pruebas unitarias
-        run: npm test
+          if [ -d privado ]; then echo "::error::La carpeta privado/ no debe estar en el repositorio"; exit 1; fi
 
       - name: Construir el sitio
         run: npm run build
 
-      - name: Pruebas funcionales (Playwright, con la plantilla pública)
-        run: |
-          npx playwright install --with-deps chromium
-          npm run build:prueba
-          npm run e2e
-
-      - name: Textos de cualquier largo (prueba de estrés)
-        run: npm run estres
-
-      - name: Nada personal sin cifrar en lo que se publica
-        run: |
-          test -f public/privado/2026/contenido.enc || echo "::warning::No hay contenido cifrado: ejecuta npm run cifrar y sube public/privado/"
-          if [ -d privado ]; then echo "::error::La carpeta privado/ no debe estar en el repositorio"; exit 1; fi
-
       - name: Subir el sitio
-        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   publicar:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: verificar-y-construir
+    needs: construir
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -82,8 +54,8 @@ jobs:
   # Versión nueva en VERSION (y su sección en CHANGELOG.md) → tag vX.Y.Z + release en GitHub.
   # Si esa versión ya tiene tag, no hace nada.
   release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: verificar-y-construir
+    if: github.ref == 'refs/heads/main'
+    needs: publicar
     runs-on: ubuntu-latest
     permissions:
       contents: write

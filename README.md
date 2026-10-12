@@ -160,7 +160,7 @@ El repositorio es público, pero tu regalo no:
 1. Sube el repositorio a GitHub como `feliz-cumple-isa` (la ruta base ya está configurada en `vite.config.ts`).
 2. En GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 3. Antes de cada `push`: `npm run cifrar` (si cambiaste textos o fotos). Comprueba con `git status` que **no** aparecen `privado/` ni `.env`.
-4. Cada `push` a `main` ejecuta [.github/workflows/pages.yml](.github/workflows/pages.yml): instala con `npm ci`, pasa lint, tipos, pruebas unitarias, pruebas funcionales y de estrés (con la plantilla pública) y publica. Si alguien subiera la carpeta `privado/`, la publicación falla.
+4. Cada PR ejecuta [.github/workflows/ci.yml](.github/workflows/ci.yml): versión coherente, lint, tipos, pruebas unitarias, pruebas funcionales y de estrés (con la plantilla pública). Al hacer merge, el `push` a `main` ejecuta [.github/workflows/pages.yml](.github/workflows/pages.yml): solo construye, publica y, si `VERSION` es nueva, crea el tag y el release. Si alguien subiera la carpeta `privado/`, ambos fallan.
 
 Sin backend, sin servicios de pago, sin analítica ni rastreadores. La página no se indexa en buscadores (`noindex`).
 
