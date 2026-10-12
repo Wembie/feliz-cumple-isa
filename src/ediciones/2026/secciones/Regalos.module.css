@@ -1,0 +1,246 @@
+/* MOMENTO 4 · Una cosita más para ti — fondo girasol con trama, acentos tomate y cobalto. */
+
+.regalos {
+  position: relative;
+  padding-block: var(--e-8) var(--e-9);
+  background-color: var(--girasol);
+  background-image: var(--trama);
+  background-size: 15px 15px;
+  border-top: var(--borde);
+  overflow: clip;
+}
+
+/* ── Titular ─────────────────────────────────────────── */
+.cabeza {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-5);
+}
+
+.cabezaTitulo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-4);
+}
+
+.numero {
+  color: var(--tinta);
+  margin-bottom: calc(-1 * var(--e-2));
+}
+
+.titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.25em;
+  font-family: var(--f-display);
+  font-weight: 800;
+  line-height: 0.85;
+}
+
+.tituloLinea {
+  flex-basis: 100%;
+  font-stretch: 80%;
+  font-size: var(--t-xl);
+}
+
+.tituloGrande {
+  font-size: clamp(5rem, 2.4rem + 13vw, 11rem);
+  letter-spacing: -0.04em;
+  color: var(--tomate);
+  -webkit-text-stroke: 0.04em var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0.05em 0.05em 0 var(--tinta);
+}
+
+.tituloEtiqueta {
+  align-self: center;
+  padding: 0.1em 0.45em 0.16em;
+  border: var(--borde);
+  border-radius: 999px;
+  background: var(--cobalto);
+  box-shadow: var(--sombra-s);
+  color: var(--papel);
+  font-stretch: 88%;
+  font-size: clamp(1.6rem, 1rem + 3vw, 3.4rem);
+  rotate: -5deg;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-3);
+  max-width: 34ch;
+}
+
+.subtitulo {
+  font-family: var(--f-display);
+  font-weight: 650;
+  font-stretch: 90%;
+  font-size: var(--t-l);
+  line-height: 1.15;
+}
+
+.pista {
+  font-size: var(--t-s);
+  font-weight: 600;
+}
+
+.contador {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  padding: 0.3em 0.8em;
+  border: var(--borde-fino);
+  border-radius: 999px;
+  background: var(--papel);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.contadorPuntos {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.contadorPuntos i {
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--tinta);
+  border-radius: 3px;
+  transition:
+    background-color 0.2s,
+    transform 0.3s var(--ease-salto);
+}
+
+.contadorPuntos i[data-abierto='true'] {
+  background: var(--tomate);
+  transform: rotate(45deg);
+}
+
+/* ── La mesa de regalos ──────────────────────────────── */
+.coleccion {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  justify-items: center;
+  gap: var(--e-8) var(--e-4);
+  margin: var(--e-8) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.puesto {
+  --w: clamp(112px, 33vw, 150px);
+  --i: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--e-4);
+  min-width: 0;
+}
+
+.puesto > button {
+  --w: inherit;
+  transition-delay: calc(var(--i) * 70ms);
+}
+
+.puesto[data-destacado='true'] {
+  --w: clamp(176px, 54vw, 230px);
+  grid-column: 1 / -1;
+  margin-top: var(--e-6);
+}
+
+.rotulo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 0.35em;
+  align-items: center;
+  max-width: calc(var(--w) * 1.05);
+  min-height: 1.8em;
+  padding: 0.2em 0.7em;
+  border: var(--borde-fino);
+  border-radius: 999px;
+  background: var(--papel);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  line-height: 1.15;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s var(--ease-salto);
+}
+
+.rotulo span {
+  color: var(--tomate);
+  font-weight: 800;
+}
+
+.rotulo[data-visible='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+.volverAVer {
+  position: relative;
+  z-index: 1;
+  margin-top: calc(-1 * var(--e-2));
+  background: var(--tinta) !important;
+  color: var(--papel) !important;
+}
+
+/* Aterrizaje (solo si el JS está listo, para no esconder nada si falla) */
+.coleccion[data-listo] .puesto:not([data-visible]) > button {
+  opacity: 0;
+  transform: translateY(-80px) rotate(10deg);
+}
+
+@media (max-width: 899px) {
+  .puesto[data-destacado='true'] {
+    order: 99 !important;
+  }
+
+  /* Si queda un paquete solo en la última fila, se centra */
+  .puesto[data-solo='true'] {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── Escritorio: una mesa ancha con el regalo principal al centro ── */
+@media (min-width: 900px) {
+  .cabeza {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--e-8);
+  }
+
+  .coleccion {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: var(--e-8) clamp(1.5rem, 2.6vw, 3rem);
+    margin-top: var(--e-9);
+  }
+
+  .puesto {
+    --w: clamp(128px, 10.5vw, 160px);
+    translate: 0 var(--y);
+  }
+
+  .puesto[data-destacado='true'] {
+    --w: clamp(200px, 17vw, 260px);
+    margin-top: 0;
+    translate: 0 0;
+  }
+}

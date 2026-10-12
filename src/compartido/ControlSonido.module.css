@@ -1,0 +1,61 @@
+.boton {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px 0 11px;
+  border: var(--borde);
+  border-radius: 999px;
+  background: var(--papel);
+  color: var(--tinta);
+  box-shadow: var(--sombra-s);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transform: rotate(3deg);
+  transition:
+    transform 0.2s var(--ease-salto),
+    background-color 0.2s;
+}
+
+.texto {
+  max-width: 9rem;
+  line-height: 1.05;
+  text-align: left;
+}
+
+.boton:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.boton:active {
+  transform: rotate(0deg) scale(0.95);
+}
+
+.boton[data-activo='true'] {
+  background: var(--girasol);
+}
+
+@media (max-width: 420px) {
+  .texto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .boton {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    justify-content: center;
+  }
+}

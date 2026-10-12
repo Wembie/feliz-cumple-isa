@@ -1,0 +1,21 @@
+.marcador {
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--girasol) 75%, var(--papel)) 0 6px,
+    color-mix(in srgb, var(--girasol) 45%, var(--papel)) 6px 12px
+  );
+  color: var(--tinta);
+  font-family: var(--f-texto);
+  font-style: italic;
+  font-weight: 500;
+  font-size: max(0.8em, 0.875rem);
+  font-stretch: 100%;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.35;
+  padding: 0.05em 0.35em;
+  border-bottom: 2px dashed var(--tinta);
+  border-radius: 3px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}

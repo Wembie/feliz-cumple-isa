@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["node", "vite/client"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "paths": { "@constantes-2026": ["./src/ediciones/2026/constantes.ejemplo.ts"] },
+    "noEmit": true
+  },
+  "include": ["vite.config.ts", "playwright.config.ts", "e2e", "tests", "src", "scripts/**/*.ts"]
+}

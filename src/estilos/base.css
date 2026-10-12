@@ -1,0 +1,121 @@
+@import '@fontsource-variable/bricolage-grotesque/standard.css';
+@import '@fontsource-variable/instrument-sans/wght.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--f-texto);
+  font-size: var(--t-m);
+  line-height: 1.5;
+  overflow-x: clip;
+  /* una palabra muy larga se parte antes que salirse de la pantalla */
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Grano de risografía sobre todo el documento */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.4 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+h1,
+h2,
+h3,
+p,
+figure,
+blockquote {
+  margin: 0;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--tinta);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 7px var(--girasol);
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--girasol);
+  color: var(--tinta);
+}
+
+.solo-lectores {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Botón-sticker reutilizable */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  text-align: center;
+  gap: var(--e-2);
+  min-height: 48px;
+  min-width: 44px;
+  padding: var(--e-2) var(--e-5);
+  border: var(--borde);
+  border-radius: 999px;
+  background: var(--papel);
+  box-shadow: var(--sombra-s);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-s);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  transition:
+    transform 0.18s var(--ease-salto),
+    box-shadow 0.18s var(--ease-salto);
+}
+
+.boton:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--tinta);
+}
+
+.boton:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--tinta);
+}

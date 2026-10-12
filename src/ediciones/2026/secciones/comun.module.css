@@ -1,0 +1,47 @@
+/* Piezas editoriales compartidas por las secciones de la edición 2026 */
+
+.contenedor {
+  width: min(100% - 2 * var(--gutter), var(--ancho-max));
+  margin-inline: auto;
+}
+
+/* Número de sección gigante, solo contorno: como en una revista */
+.numero {
+  display: block;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: clamp(5rem, 3rem + 10vw, 11rem);
+  line-height: 0.75;
+  color: transparent;
+  -webkit-text-stroke: 3px currentColor;
+  letter-spacing: -0.03em;
+  user-select: none;
+}
+
+/* Etiqueta pequeña sobre el titular */
+.antetitulo {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  line-height: 1.3;
+  gap: var(--e-2);
+  padding: 0.35em 0.8em 0.3em;
+  border: var(--borde-fino);
+  border-radius: 999px;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+.antetitulo::before {
+  content: '';
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  background: currentColor;
+}

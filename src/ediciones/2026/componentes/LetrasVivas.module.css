@@ -1,0 +1,70 @@
+.letras {
+  flex: none;
+  max-width: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 0;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 100%;
+  font-size: var(--tam-isa, clamp(8rem, 44vw, 26rem));
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.letra {
+  flex: none;
+  position: relative;
+  padding: 0.04em 0.015em 0.06em;
+  margin: 0 -0.02em;
+  border: 0;
+  background: none;
+  font: inherit;
+  line-height: inherit;
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
+  will-change: transform;
+  border-radius: 0.08em;
+}
+
+.letra[data-arrastrando] {
+  cursor: grabbing;
+  z-index: 5;
+}
+
+.letra:focus-visible {
+  outline-offset: -0.02em;
+}
+
+.interior {
+  display: block;
+  color: var(--c);
+  -webkit-text-stroke: 0.055em var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0.055em 0.05em 0 var(--tinta);
+  transform-origin: 50% 90%;
+  animation: bambolear var(--d) ease-in-out calc(1.3s + var(--i) * 0.2s) infinite alternate both;
+}
+
+@keyframes bambolear {
+  from {
+    transform: rotate(-2.2deg);
+  }
+  to {
+    transform: rotate(2.4deg) translateY(-0.015em);
+  }
+}
+
+.lazo {
+  position: absolute;
+  top: -0.08em;
+  left: 50%;
+  width: 0.4em;
+  translate: -48% 0;
+  rotate: 12deg;
+  pointer-events: none;
+}

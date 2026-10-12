@@ -1,0 +1,386 @@
+/* MOMENTO 1 · ¡ISA! — póster editorial vivo. Fondo papel, una tinta por letra. */
+
+.entrada {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+  background: var(--papel);
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ── Cabecera de revista ─────────────────────────────── */
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-2) var(--e-4);
+  min-height: 72px;
+  padding: var(--e-3) calc(var(--gutter) + 92px) var(--e-3) var(--gutter);
+  border-bottom: var(--borde);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: deArriba 0.5s var(--ease-papel) both;
+}
+
+.marca {
+  font-weight: 800;
+  font-size: 1.35em;
+  letter-spacing: 0;
+  color: var(--tomate);
+  -webkit-text-stroke: 1px var(--tinta);
+}
+
+.cabeceraTexto {
+  order: 3;
+  flex-basis: 100%;
+  min-width: 0;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+}
+
+.fecha {
+  margin-left: auto;
+  padding: 0.2em 0.6em;
+  background: var(--tinta);
+  color: var(--papel);
+  border-radius: 4px;
+}
+
+/* ── Póster ──────────────────────────────────────────── */
+.poster {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--e-5) var(--gutter) 0;
+}
+
+.saludo {
+  position: relative;
+  align-self: flex-start;
+  /* deja libre la esquina del sello */
+  max-width: min(6em, 100% - clamp(86px, 23vw, 128px) - 8px);
+  overflow-wrap: break-word;
+  font-family: var(--f-display);
+  font-weight: 750;
+  font-stretch: 82%;
+  font-size: clamp(2.6rem, 1.6rem + 4.6vw, 4.4rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.cintaSaludo {
+  top: -12px;
+  left: -26px;
+  width: 78px;
+  height: 26px;
+  rotate: -28deg;
+  animation: pegar 0.45s var(--ease-salto) 0.55s both;
+}
+
+.zonaLetras {
+  --tam-isa: clamp(7.5rem, 50vw, 13rem);
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--e-3) var(--e-6);
+  margin-block: auto;
+  padding-block: var(--e-5) var(--e-2);
+}
+
+.pista {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-2);
+  flex: 1 1 14rem;
+  max-width: 24ch;
+  margin-left: var(--e-6);
+  font-family: var(--f-display);
+  font-weight: 650;
+  font-stretch: 85%;
+  font-size: var(--t-s);
+  rotate: -3deg;
+  animation: aparecer 0.5s ease 1.4s both;
+}
+
+.flecha {
+  width: 42px;
+  height: 32px;
+  flex: none;
+  margin-top: -14px;
+  transform: scaleX(-1) rotate(-12deg);
+}
+
+.sello {
+  position: absolute;
+  top: var(--e-4);
+  right: var(--gutter);
+  width: clamp(86px, 23vw, 128px);
+  rotate: 10deg;
+  animation: estampar 0.6s var(--ease-salto) 0.45s both;
+}
+
+.insignia {
+  position: absolute;
+  z-index: 4;
+  right: calc(var(--gutter) - 4px);
+  bottom: -54px;
+  width: clamp(96px, 27vw, 132px);
+  rotate: 12deg;
+  font-size: clamp(0.95rem, 0.7rem + 1vw, 1.25rem);
+  animation: deDerecha 0.65s var(--ease-salto) 0.7s both;
+}
+
+/* ── Cinta de fiesta ─────────────────────────────────── */
+.cinta {
+  position: relative;
+  z-index: 2;
+  width: 130%;
+  margin: var(--e-6) 0 0 -15%;
+  padding: 0.45em 0 0.38em;
+  background: var(--tinta);
+  color: var(--papel);
+  rotate: -3.5deg;
+  overflow: hidden;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: clamp(1.3rem, 1rem + 1.6vw, 2.3rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  animation: barrer 0.7s var(--ease-golpe) 0.3s both;
+}
+
+.marquesina {
+  display: flex;
+  width: max-content;
+  animation: desplazar 28s linear infinite;
+}
+
+.marquesina span {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding-inline: 0.35em;
+}
+
+.marquesina i {
+  display: inline-block;
+  width: 0.42em;
+  height: 0.42em;
+  margin-left: 0.7em;
+  border-radius: 50%;
+  background: var(--girasol);
+}
+
+/* ── Pie del póster ──────────────────────────────────── */
+.pie {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e-4);
+  padding: var(--e-6) var(--gutter) var(--e-6);
+}
+
+.eslogan {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 13em;
+  overflow-wrap: break-word;
+  font-family: var(--f-display);
+  font-weight: 650;
+  font-stretch: 88%;
+  font-size: clamp(1.65rem, 1.1rem + 2.4vw, 3.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.destacado {
+  /* subrayado hecho a mano que sigue cada línea si el texto se parte */
+  padding-bottom: 0.08em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 18' preserveAspectRatio='none'%3E%3Cpath d='M3 12C42 3 82 15 122 8s70-6 95 1' fill='none' stroke='%23FF4D38' stroke-width='6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E")
+    left bottom / 100% 0.3em no-repeat;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  animation: trazarFondo 0.7s var(--ease-papel) 0.9s both;
+}
+
+@keyframes trazarFondo {
+  from {
+    background-size: 0% 0.3em;
+  }
+}
+
+.invitacion {
+  flex: none;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  width: 88px;
+  height: 88px;
+  padding: 8px;
+  border: var(--borde);
+  border-radius: 50%;
+  background: var(--cobalto);
+  color: var(--papel);
+  box-shadow: var(--sombra-s);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 80%;
+  font-size: calc(0.8125rem * var(--escala, 1));
+  line-height: 1;
+  text-transform: uppercase;
+  text-align: center;
+  overflow-wrap: anywhere;
+  animation:
+    pop 0.5s var(--ease-salto) 1.05s both,
+    flotar 2.4s ease-in-out 1.8s infinite;
+}
+
+.invitacion:hover {
+  background: var(--tomate);
+}
+
+/* ── Escritorio: composición más ambiciosa ───────────── */
+@media (min-width: 421px) {
+  .cabecera {
+    padding-right: calc(var(--gutter) + 200px);
+  }
+}
+
+@media (min-width: 768px) {
+  .cabecera {
+    flex-wrap: nowrap;
+  }
+
+  .cabeceraTexto {
+    order: 0;
+    flex: 1 1 auto;
+  }
+
+  .saludo {
+    max-width: none;
+    font-size: clamp(2.6rem, 1rem + 3.4vw, 5rem);
+  }
+
+  .zonaLetras {
+    --tam-isa: clamp(10rem, min(44vw, 52svh), 30rem);
+    margin-block: auto;
+    padding-block: var(--e-4) 0;
+    margin-left: -0.04em;
+  }
+
+  .pista {
+    margin: 0 0 8% 0;
+    font-size: var(--t-m);
+  }
+
+  .flecha {
+    width: 56px;
+    height: 42px;
+    transform: rotate(160deg) scaleY(-1);
+    margin-top: 10px;
+  }
+
+  .sello {
+    top: var(--e-6);
+    right: calc(var(--gutter) + 2vw);
+    width: clamp(150px, 14vw, 210px);
+  }
+
+  .insignia {
+    right: calc(var(--gutter) + 4vw);
+    bottom: -76px;
+    width: clamp(140px, 12vw, 180px);
+    rotate: -9deg;
+  }
+
+  .cinta {
+    margin-top: var(--e-5);
+    rotate: -2.2deg;
+  }
+
+  .pie {
+    padding-top: var(--e-6);
+  }
+
+  .invitacion {
+    width: 104px;
+    height: 104px;
+    font-size: calc(0.9375rem * var(--escala, 1));
+  }
+}
+
+/* ── Coreografía de entrada: breve, desde bordes distintos ── */
+@keyframes deArriba {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes deDerecha {
+  from {
+    transform: translateX(60vw) rotate(90deg);
+  }
+}
+
+@keyframes estampar {
+  from {
+    transform: scale(2.4) rotate(-50deg);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+@keyframes pegar {
+  from {
+    transform: scale(1.6) translateY(-20px);
+    opacity: 0;
+  }
+}
+
+@keyframes barrer {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes desplazar {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0) rotate(-40deg);
+  }
+}
+
+@keyframes flotar {
+  50% {
+    transform: translateY(-7px) rotate(-4deg);
+  }
+}

@@ -1,0 +1,194 @@
+/* MOMENTO 2 · Pide un deseo — fondo cobalto con trama, acento girasol. */
+
+.deseo {
+  position: relative;
+  padding-block: var(--e-8) var(--e-8);
+  background-color: var(--cobalto);
+  background-image: var(--trama-clara);
+  background-size: 15px 15px;
+  color: var(--papel);
+  border-top: var(--borde);
+  overflow: clip;
+  scroll-margin-top: 0;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'cabeza'
+    'escena'
+    'controles';
+  gap: var(--e-6);
+}
+
+.cabeza {
+  grid-area: cabeza;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-4);
+}
+
+.numero {
+  margin-bottom: calc(-1 * var(--e-2));
+  color: var(--papel);
+}
+
+.titulo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--f-display);
+  font-weight: 800;
+  line-height: 0.85;
+}
+
+.titulo > span:first-child {
+  font-stretch: 78%;
+  font-size: var(--t-xl);
+  letter-spacing: -0.01em;
+}
+
+.tituloGrande {
+  display: inline-block;
+  margin-top: 0.04em;
+  font-size: clamp(5.2rem, 2.4rem + 13vw, 11.5rem);
+  letter-spacing: -0.035em;
+  color: var(--girasol);
+  -webkit-text-stroke: 0.04em var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0.05em 0.05em 0 var(--tinta);
+  rotate: -3deg;
+  transform-origin: left bottom;
+}
+
+.instrucciones {
+  max-width: 30ch;
+  font-size: var(--t-m);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.escena {
+  grid-area: escena;
+  position: relative;
+  width: min(100%, 500px);
+  justify-self: center;
+  padding-inline: var(--e-2);
+}
+
+.insigniaExito {
+  position: absolute;
+  z-index: 3;
+  top: 2%;
+  left: -3%;
+  width: clamp(132px, 36vw, 180px);
+  font-size: clamp(0.95rem, 0.75rem + 1vw, 1.35rem);
+  rotate: -12deg;
+  animation: golpe 0.55s var(--ease-salto) both;
+}
+
+@keyframes golpe {
+  from {
+    transform: scale(2.6) rotate(25deg);
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+  }
+}
+
+.controles {
+  grid-area: controles;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-4);
+}
+
+.estado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-3);
+  min-height: 2.5em;
+  font-family: var(--f-display);
+  font-weight: 650;
+  font-size: var(--t-l);
+  line-height: 1.15;
+}
+
+.estado strong {
+  color: var(--girasol);
+  font-weight: 800;
+}
+
+.contador {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.contador i {
+  width: 14px;
+  height: 20px;
+  border: var(--borde-fino);
+  border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%;
+  background: var(--girasol);
+  transition:
+    background-color 0.2s,
+    transform 0.25s var(--ease-salto);
+}
+
+.contador i[data-apagada='true'] {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--papel) 70%, transparent);
+  transform: scale(0.75);
+}
+
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-3);
+}
+
+.botones :global(.boton) {
+  color: var(--tinta);
+}
+
+.botonPrincipal {
+  background: var(--girasol) !important;
+}
+
+.aviso {
+  max-width: 34ch;
+  padding: var(--e-2) var(--e-3);
+  border: var(--borde-fino);
+  border-radius: 10px;
+  background: var(--papel);
+  color: var(--tinta);
+  font-size: var(--t-s);
+  font-weight: 500;
+}
+
+@media (min-width: 900px) {
+  .deseo {
+    padding-block: var(--e-9);
+  }
+
+  .rejilla {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-areas:
+      'cabeza escena'
+      'controles escena';
+    grid-template-rows: auto 1fr;
+    column-gap: var(--e-8);
+    align-items: start;
+  }
+
+  .escena {
+    align-self: center;
+    width: min(100%, 560px);
+  }
+}
