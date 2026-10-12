@@ -1,0 +1,116 @@
+/* CIERRE — tomate a sangre, papel y girasol. Festivo y cálido. */
+
+.cierre {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--e-5);
+  min-height: 92svh;
+  padding: var(--e-9) var(--gutter) var(--e-5);
+  background-color: var(--tomate);
+  background-image: var(--trama);
+  background-size: 14px 14px;
+  border-top: var(--borde);
+  color: var(--papel);
+  text-align: center;
+  overflow: clip;
+}
+
+.isa {
+  display: flex;
+  justify-content: center;
+  margin-block: auto var(--e-2);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(8rem, 42vw, 24rem);
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  user-select: none;
+}
+
+.isa span {
+  display: inline-block;
+  color: var(--papel);
+  -webkit-text-stroke: 0.05em var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0.06em 0.06em 0 var(--tinta);
+  animation: ola 2.4s ease-in-out calc(var(--i) * 0.14s) infinite;
+  animation-play-state: paused;
+}
+
+.isa span:nth-child(4n + 2) {
+  color: var(--girasol);
+}
+
+.cierre[data-visible='true'] .isa span {
+  animation-play-state: running;
+}
+
+@keyframes ola {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-0.09em) rotate(-4deg);
+  }
+  60% {
+    transform: translateY(0.02em) rotate(2deg);
+  }
+}
+
+.frase {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 80%;
+  font-size: var(--t-xxl);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--tinta);
+}
+
+.subfrase {
+  max-width: 26ch;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-stretch: 90%;
+  font-size: var(--t-l);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.repetir {
+  margin-top: var(--e-3);
+  color: var(--tinta);
+}
+
+.pie {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--e-2) var(--e-5);
+  width: 100%;
+  margin-top: auto;
+  padding-top: var(--e-6);
+  border-top: 2px dashed color-mix(in srgb, var(--papel) 60%, transparent);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pie nav {
+  display: flex;
+  gap: var(--e-3);
+}
+
+.pie a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-underline-offset: 3px;
+}

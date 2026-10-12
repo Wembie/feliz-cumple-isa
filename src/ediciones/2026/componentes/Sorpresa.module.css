@@ -1,0 +1,491 @@
+/* Contenido revelado de cada regalo. Fondo papel siempre: máxima legibilidad. */
+
+.titulo {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 82%;
+  font-size: var(--t-l);
+  line-height: 1.05;
+  margin-bottom: var(--e-4);
+}
+
+.pie {
+  margin-top: var(--e-3);
+  font-size: var(--t-s);
+  color: var(--tinta-suave);
+}
+
+/* ── Mensaje: composición tipográfica palabra a palabra ── */
+.mensajeTexto {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 84%;
+  font-size: clamp(1.9rem, 1.3rem + 3vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.palabra {
+  display: inline-block;
+  animation: palabra 0.45s var(--ease-salto) calc(0.15s + var(--n) * 0.055s) both;
+}
+
+.palabra:nth-child(3n + 2) {
+  color: var(--tomate);
+}
+
+@keyframes palabra {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em) rotate(-8deg) scale(0.8);
+  }
+}
+
+/* ── Foto ────────────────────────────────────────────── */
+.polaroid {
+  margin: 0;
+  padding: 12px 12px 14px;
+  border: var(--borde);
+  background: var(--papel);
+  box-shadow: var(--sombra-m);
+  rotate: -2deg;
+  animation: caer 0.6s var(--ease-salto) both;
+}
+
+.polaroid figcaption {
+  margin-top: var(--e-3);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-m);
+  text-align: center;
+}
+
+@keyframes caer {
+  from {
+    opacity: 0;
+    transform: translateY(-40px) rotate(-12deg) scale(0.9);
+  }
+}
+
+.imagen {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--r);
+  max-height: 58svh;
+  overflow: hidden;
+  border: var(--borde-fino);
+  background: var(--papel-sombra);
+}
+
+.imagen[data-ampliada='true'] {
+  aspect-ratio: auto;
+  height: 76svh;
+  max-height: none;
+}
+
+.ampliar {
+  margin-top: var(--e-3);
+}
+
+/* ── Carta ───────────────────────────────────────────── */
+.hoja {
+  padding: var(--e-6) var(--e-5);
+  border: var(--borde);
+  background-color: var(--papel);
+  background-image: repeating-linear-gradient(
+    transparent 0 calc(1.7em - 1px),
+    color-mix(in srgb, var(--cobalto) 18%, transparent) calc(1.7em - 1px) 1.7em
+  );
+  box-shadow: var(--sombra-m);
+  line-height: 1.7;
+  animation: desplegar 0.8s var(--ease-papel) both;
+}
+
+@keyframes desplegar {
+  from {
+    clip-path: inset(0 -20px 100% -20px);
+    transform: translateY(40px) rotate(-2deg);
+  }
+  to {
+    clip-path: inset(-30px -20px -20px -20px);
+  }
+}
+
+.cartaSaludo {
+  margin-bottom: var(--e-3);
+  font-family: var(--f-display);
+  font-weight: 750;
+  font-size: var(--t-l);
+}
+
+.cartaParrafo {
+  margin-bottom: 1em;
+  font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+}
+
+.cartaFirma {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: var(--t-l);
+  color: var(--tomate);
+  -webkit-text-stroke: 1px var(--tinta);
+  rotate: -3deg;
+  display: inline-block;
+}
+
+/* ── Video ───────────────────────────────────────────── */
+.video {
+  animation: subir 0.5s var(--ease-papel) both;
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+.reproductor {
+  display: block;
+  width: 100%;
+  max-height: 62svh;
+  border: var(--borde);
+  background: var(--tinta);
+  box-shadow: var(--sombra-m);
+}
+
+.videoPendiente {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e-2);
+  aspect-ratio: 16 / 9;
+  border: var(--borde);
+  background-color: var(--menta);
+  background-image: var(--trama);
+  background-size: 12px 12px;
+  outline: 2px dashed var(--tinta);
+  outline-offset: -12px;
+  text-align: center;
+}
+
+.videoPendiente strong {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: var(--t-l);
+  text-transform: uppercase;
+}
+
+.videoPendiente span {
+  padding: 0.1em 0.5em;
+  background: var(--papel);
+  border-radius: 4px;
+  font-size: var(--t-xs);
+  font-weight: 600;
+}
+
+/* ── Regalo real: el clímax ──────────────────────────── */
+.fisico {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.fisicoEscena {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 360px);
+  margin: var(--e-4) 0 var(--e-6);
+  animation: emerger 0.9s var(--ease-salto) 0.1s both;
+}
+
+.fisicoEscena > *:not(.fisicoRayos) {
+  position: relative;
+  rotate: -3deg;
+  box-shadow: var(--sombra-l);
+}
+
+@keyframes emerger {
+  from {
+    opacity: 0;
+    transform: translateY(80px) scale(0.6) rotate(8deg);
+  }
+}
+
+.fisicoRayos {
+  position: absolute;
+  inset: -30%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--girasol) 0 9deg, transparent 9deg 18deg);
+  mask: radial-gradient(circle, #000 25%, transparent 68%);
+  -webkit-mask: radial-gradient(circle, #000 25%, transparent 68%);
+  animation: rayos 1.4s var(--ease-papel) both;
+}
+
+@keyframes rayos {
+  from {
+    transform: scale(0) rotate(-60deg);
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.fisicoSinFoto {
+  display: grid;
+  place-items: center;
+  width: 60%;
+  aspect-ratio: 1;
+  border: var(--borde);
+  border-radius: 50%;
+  background: var(--tomate);
+  color: var(--papel);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(4rem, 3rem + 6vw, 7rem);
+  -webkit-text-stroke: 2px var(--tinta);
+}
+
+.fisicoAntetitulo {
+  padding: 0.3em 0.9em;
+  border: var(--borde-fino);
+  border-radius: 999px;
+  background: var(--tinta);
+  color: var(--papel);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  animation: subir 0.5s var(--ease-papel) 0.6s both;
+}
+
+.fisicoNombre {
+  margin: var(--e-4) 0 var(--e-4);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 80%;
+  font-size: clamp(2.4rem, 1.6rem + 4.2vw, 4.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.fisicoNombre .palabra {
+  animation-delay: calc(0.75s + var(--n) * 0.07s);
+}
+
+.fisicoDescripcion {
+  max-width: 38ch;
+  font-size: var(--t-m);
+  line-height: 1.6;
+  animation: subir 0.5s var(--ease-papel) 1s both;
+}
+
+.extra {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--e-4);
+  margin-top: var(--e-6);
+  animation: subir 0.5s var(--ease-papel) 1.15s both;
+}
+
+.extraBoton {
+  background: var(--tomate) !important;
+  color: var(--papel) !important;
+}
+
+.extraMensaje {
+  max-width: 34ch;
+  padding: var(--e-4) var(--e-5);
+  border: var(--borde);
+  background: var(--girasol);
+  box-shadow: var(--sombra-s);
+  font-family: var(--f-display);
+  font-weight: 650;
+  font-size: var(--t-l);
+  line-height: 1.25;
+  rotate: 1.5deg;
+  animation: desplegar 0.6s var(--ease-papel) both;
+}
+
+/* ── Sorpresa personalizada ──────────────────────────── */
+.personalizada {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-4);
+  animation: pop 0.5s var(--ease-salto) both;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85) rotate(-3deg);
+  }
+}
+
+.personalizadaTexto {
+  font-size: var(--t-m);
+  line-height: 1.6;
+}
+
+.personalizadaFinal {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 84%;
+  font-size: clamp(1.7rem, 1.2rem + 2.4vw, 2.8rem);
+  line-height: 1.02;
+}
+
+.videoCargando {
+  aspect-ratio: 16 / 9;
+  border: var(--borde);
+  background: repeating-linear-gradient(-45deg, var(--papel-sombra) 0 12px, var(--papel) 12px 24px);
+}
+
+/* ── Regalos dentro del regalo real ──────────────────── */
+.dentro {
+  position: relative;
+  width: 100%;
+  margin-top: var(--e-4);
+  animation: subir 0.5s var(--ease-papel) 0.25s both;
+}
+
+.dentroTitulo {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 84%;
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.dentroPaquetes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--e-7) var(--e-8);
+  margin: var(--e-5) 0 var(--e-5);
+  padding: var(--e-3) 0 0;
+  list-style: none;
+}
+
+.dentroPuesto {
+  --w: clamp(104px, 28vw, 140px);
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.dentroPuesto > button {
+  --w: inherit;
+  rotate: var(--giro);
+}
+
+/* Explosión pequeña de papelitos al abrir (el confeti grande queda detrás del diálogo) */
+.chispas {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.chispas i {
+  --angulo: calc(var(--k) * 30deg);
+  position: absolute;
+  width: 9px;
+  height: 14px;
+  border: 1.5px solid var(--tinta);
+  border-radius: 2px;
+  background: var(--tomate);
+  opacity: 0;
+  animation: chispa 0.9s var(--ease-papel) both;
+}
+
+.chispas i:nth-child(3n + 1) {
+  background: var(--girasol);
+}
+
+.chispas i:nth-child(3n + 2) {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cobalto);
+}
+
+@keyframes chispa {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--angulo)) translateY(0) scale(0.4);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--angulo)) translateY(-110px) rotate(200deg) scale(1);
+  }
+}
+
+.dentroAbierto {
+  width: 100%;
+  margin-top: var(--e-4);
+  padding: var(--e-6) var(--e-4) var(--e-5);
+  border: var(--borde);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--girasol) 22%, var(--papel));
+  box-shadow: var(--sombra-m);
+  scroll-margin: var(--e-6);
+  animation: llegarDentro 0.5s var(--ease-salto) both;
+}
+
+@keyframes llegarDentro {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+  }
+}
+
+.dentroMensaje {
+  margin-top: var(--e-5);
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: var(--t-m);
+}
+
+/* ── El regalo real: una caja que solo contiene otros regalos ── */
+.caja {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Los rayos no pasan del ancho de la tarjeta; las etiquetas de los paquetes sí pueden asomar */
+.cajaRayos {
+  position: absolute;
+  top: -15%;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--girasol) 0 9deg, transparent 9deg 18deg);
+  mask: radial-gradient(circle, #000 20%, transparent 62%);
+  -webkit-mask: radial-gradient(circle, #000 20%, transparent 62%);
+  opacity: 0.55;
+  animation: rayos 1.4s var(--ease-papel) both;
+  pointer-events: none;
+}
+
+.caja > :not(.cajaRayos) {
+  position: relative;
+}

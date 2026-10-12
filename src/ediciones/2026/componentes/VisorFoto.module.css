@@ -1,0 +1,150 @@
+.visor {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: max(16px, env(safe-area-inset-top)) var(--gutter) max(16px, env(safe-area-inset-bottom));
+  border: 0;
+  background: transparent;
+  color: var(--tinta);
+  overflow: auto;
+}
+
+.visor::backdrop {
+  background-color: color-mix(in srgb, var(--tinta) 86%, transparent);
+  background-image: var(--trama-clara);
+  background-size: 14px 14px;
+}
+
+.visor[open] .marco {
+  animation: abrir 0.45s var(--ease-salto) both;
+}
+
+@keyframes abrir {
+  from {
+    transform: scale(0.72) rotate(-6deg);
+    opacity: 0;
+  }
+}
+
+.marco {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e-5);
+  padding-top: 56px;
+}
+
+.cerrar {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: var(--borde);
+  border-radius: 50%;
+  background: var(--papel);
+  box-shadow: var(--sombra-s);
+}
+
+.escena {
+  width: min(100%, 680px, calc(64svh * var(--r)));
+  aspect-ratio: var(--r);
+  perspective: 1600px;
+}
+
+.tarjeta {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.75s var(--ease-papel);
+}
+
+.tarjeta[data-volteada='true'] {
+  transform: rotateY(180deg);
+}
+
+.cara {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 12px;
+  border: var(--borde);
+  border-radius: 6px;
+  background: var(--papel);
+  box-shadow: var(--sombra-l);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.frente {
+  cursor: pointer;
+  rotate: -1deg;
+}
+
+.reverso {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-4);
+  padding: var(--e-6) var(--e-5);
+  overflow: auto;
+  background-color: var(--papel);
+  background-image: repeating-linear-gradient(
+    transparent 0 calc(1.65em - 1px),
+    color-mix(in srgb, var(--cobalto) 22%, transparent) calc(1.65em - 1px) 1.65em
+  );
+  background-position: 0 calc(var(--e-6) + 0.3em);
+  font-size: var(--t-m);
+  line-height: 1.65;
+}
+
+.reversoPie {
+  align-self: flex-start;
+  padding: 0.15em 0.7em;
+  border: var(--borde-fino);
+  border-radius: 999px;
+  background: var(--menta);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: var(--t-s);
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.reversoNota {
+  font-weight: 500;
+}
+
+.controles {
+  display: flex;
+  gap: var(--e-3);
+  align-items: center;
+}
+
+.voltear {
+  background: var(--girasol) !important;
+}
+
+.flecha {
+  width: 52px;
+  padding: 0 !important;
+  font-size: 1.3rem !important;
+}
+
+.contador {
+  margin-top: calc(-1 * var(--e-3));
+  color: var(--papel);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-s);
+  letter-spacing: 0.1em;
+}

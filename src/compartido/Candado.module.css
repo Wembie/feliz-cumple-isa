@@ -1,0 +1,177 @@
+/* Pantalla de la palabra secreta: misma identidad (papel, tinta, sombras duras), sin nada del regalo. */
+
+.candado {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 26rem);
+  place-content: center;
+  place-items: center;
+  padding: var(--e-6) var(--gutter);
+  background-color: var(--chicle);
+  background-image: var(--trama);
+  background-size: 16px 16px;
+}
+
+.tarjeta {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-4);
+  padding: var(--e-7) clamp(1.25rem, 5vw, 2.5rem) var(--e-6);
+  border: var(--borde);
+  border-radius: 8px;
+  background: var(--papel);
+  box-shadow: var(--sombra-l);
+  rotate: -1deg;
+  animation: llegar 0.5s var(--ease-salto) both;
+}
+
+.tarjeta[data-error='true'] {
+  animation: sacudir 0.45s ease both;
+}
+
+@keyframes llegar {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotate(-4deg);
+  }
+}
+
+@keyframes sacudir {
+  20% {
+    transform: translateX(-10px) rotate(-1deg);
+  }
+  40% {
+    transform: translateX(8px) rotate(1deg);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.ilustracion {
+  position: absolute;
+  top: -54px;
+  right: 18px;
+  width: 104px;
+  rotate: 10deg;
+  filter: drop-shadow(4px 4px 0 var(--tinta));
+}
+
+.etiqueta {
+  padding: 0.3em 0.85em;
+  border: var(--borde-fino);
+  border-radius: 999px;
+  background: var(--tomate);
+  color: var(--papel);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.titulo {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 82%;
+  font-size: clamp(2rem, 1.5rem + 2.4vw, 2.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.texto {
+  font-size: var(--t-m);
+  line-height: 1.45;
+}
+
+.pista {
+  padding: 0.35em 0.7em;
+  border-left: 5px solid var(--tinta);
+  background: color-mix(in srgb, var(--girasol) 55%, var(--papel));
+  font-size: var(--t-s);
+  font-weight: 600;
+}
+
+.campo {
+  display: flex;
+  width: 100%;
+  border: var(--borde);
+  border-radius: 12px;
+  background: var(--papel);
+  box-shadow: var(--sombra-s);
+  overflow: hidden;
+}
+
+.campo:focus-within {
+  outline: 3px solid var(--tinta);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 7px var(--girasol);
+}
+
+.campo input {
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0 var(--e-4);
+  border: 0;
+  background: transparent;
+  color: var(--tinta);
+  font: 600 var(--t-m) / 1 var(--f-texto);
+  outline: none;
+}
+
+.mostrar {
+  flex: none;
+  min-width: 44px;
+  padding: 0 var(--e-4);
+  border: 0;
+  border-left: var(--borde-fino);
+  background: var(--menta);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.recordar {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  min-height: 44px;
+  font-size: var(--t-s);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.recordar input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--tinta);
+}
+
+.error {
+  font-weight: 700;
+  color: var(--tomate);
+  -webkit-text-stroke: 0.3px var(--tinta);
+}
+
+.abrir {
+  align-self: stretch;
+  background: var(--girasol) !important;
+  font-size: var(--t-m) !important;
+}
+
+.abrir:disabled {
+  opacity: 0.55;
+  transform: none;
+  box-shadow: none;
+  cursor: default;
+}

@@ -1,0 +1,525 @@
+/* MOMENTO 4 · La carta — fondo chicle con trama, acento tomate (lacre). */
+
+.seccion {
+  position: relative;
+  padding-block: var(--e-8) var(--e-9);
+  background-color: var(--chicle);
+  background-image: var(--trama);
+  background-size: 16px 16px;
+  border-top: var(--borde);
+  overflow: clip;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--e-7);
+}
+
+.cabeza {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-4);
+}
+
+.numero {
+  color: var(--tinta);
+  margin-bottom: calc(-1 * var(--e-2));
+}
+
+.titulo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--f-display);
+  font-weight: 800;
+  line-height: 0.86;
+}
+
+.titulo > span:first-child {
+  font-stretch: 80%;
+  font-size: var(--t-xl);
+}
+
+.tituloDestacado {
+  font-size: clamp(3.8rem, 1.6rem + 9.5vw, 8.2rem);
+  letter-spacing: -0.03em;
+  color: var(--papel);
+  -webkit-text-stroke: 0.04em var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0.06em 0.06em 0 var(--tomate);
+}
+
+/* ── Sobre ───────────────────────────────────────────── */
+.zonaSobre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--e-5);
+  padding-top: var(--e-6);
+}
+
+.sobre {
+  position: relative;
+  width: min(100%, 540px);
+  aspect-ratio: 1.55;
+  padding: 0;
+  border: 0;
+  background: none;
+  perspective: 1400px;
+  rotate: -2.5deg;
+  transition: rotate 0.35s var(--ease-salto), transform 0.35s var(--ease-salto);
+}
+
+.sobre[data-estado='cerrada']:hover {
+  rotate: 1deg;
+  transform: translateY(-4px);
+}
+
+.sobre[data-estado='cerrada'] {
+  animation: tentar 3.2s ease-in-out 1s infinite;
+}
+
+@keyframes tentar {
+  0%,
+  86%,
+  100% {
+    transform: none;
+  }
+  90% {
+    transform: rotate(-2deg);
+  }
+  95% {
+    transform: rotate(2deg);
+  }
+}
+
+.trasera {
+  position: absolute;
+  inset: 0;
+  border: var(--borde);
+  border-radius: 8px;
+  background: var(--papel-sombra);
+  box-shadow: var(--sombra-l);
+}
+
+.asomada {
+  position: absolute;
+  z-index: 1;
+  left: 7%;
+  right: 7%;
+  top: 7%;
+  bottom: 8%;
+  display: flex;
+  flex-direction: column;
+  gap: 9%;
+  padding: 8% 10%;
+  border: var(--borde-fino);
+  border-radius: 4px;
+  background: var(--papel);
+  transition: transform 0.65s var(--ease-papel) 0.45s;
+}
+
+.asomada i {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--tinta) 18%, transparent);
+}
+
+.asomada i:nth-child(2) {
+  width: 80%;
+}
+
+.asomada i:nth-child(3) {
+  width: 55%;
+}
+
+.bolsillo,
+.solapa {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+}
+
+.bolsillo {
+  z-index: 2;
+  top: 0;
+  height: 100%;
+}
+
+.bolsillo path,
+.solapa path {
+  fill: var(--papel);
+  stroke: var(--tinta);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.solapa {
+  z-index: 3;
+  top: 0;
+  height: 62%;
+  transform-origin: 50% 0;
+  transition:
+    transform 0.55s var(--ease-papel) 0.15s,
+    z-index 0s linear 0.42s;
+}
+
+.solapa path {
+  fill: color-mix(in srgb, var(--papel) 88%, var(--chicle));
+}
+
+.lacre {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 62%;
+  display: grid;
+  place-items: center;
+  width: clamp(58px, 15vw, 78px);
+  aspect-ratio: 1;
+  margin: calc(clamp(58px, 15vw, 78px) / -2) 0 0 calc(clamp(58px, 15vw, 78px) / -2);
+  border: var(--borde);
+  border-radius: 46% 54% 50% 50% / 52% 48% 52% 48%;
+  background: var(--tomate);
+  box-shadow: var(--sombra-s);
+  color: var(--papel);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(0.95rem, 0.7rem + 1vw, 1.25rem);
+  letter-spacing: 0.04em;
+  transition: transform 0.3s var(--ease-golpe);
+}
+
+.destinatario {
+  position: absolute;
+  z-index: 3;
+  left: 7%;
+  bottom: 9%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(1.1rem, 0.8rem + 1.5vw, 1.7rem);
+  line-height: 1;
+  text-align: left;
+}
+
+.destinatario small {
+  margin-bottom: 4px;
+  font-family: var(--f-texto);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.estampilla {
+  position: absolute;
+  z-index: 3;
+  right: 6%;
+  bottom: 9%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: clamp(54px, 14vw, 72px);
+  padding: 8px 4px 6px;
+  background: var(--girasol);
+  border: var(--borde-fino);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 0.75rem;
+  rotate: 6deg;
+  /* borde de sello postal: perforado sugerido con un punteado interior */
+  outline: 3px dotted var(--papel);
+  outline-offset: -7px;
+  box-shadow: 2px 2px 0 var(--tinta);
+}
+
+/* Abriendo: el lacre salta, la solapa gira y la carta sube */
+.sobre[data-estado='abriendo'] .lacre {
+  transform: translateY(-30px) rotate(70deg) scale(0);
+}
+
+.sobre[data-estado='abriendo'] .solapa {
+  transform: rotateX(180deg);
+  z-index: 0;
+}
+
+.sobre[data-estado='abriendo'] .asomada {
+  transform: translateY(-58%);
+}
+
+.pista {
+  padding: 0.35em 0.9em;
+  border: var(--borde-fino);
+  border-radius: 999px;
+  background: var(--papel);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-s);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── La carta ────────────────────────────────────────── */
+/* Mazo: las hojas que faltan asoman detrás de la actual */
+.mazo {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 44rem);
+  justify-self: center;
+}
+
+.mazo::before,
+.mazo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: var(--borde);
+  background: var(--papel-sombra);
+  box-shadow: var(--sombra-s);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mazo::before {
+  transform: translate(10px, 10px) rotate(1.6deg);
+}
+
+.mazo::after {
+  transform: translate(20px, 18px) rotate(3deg);
+  z-index: -1;
+}
+
+.mazo:not([data-restantes='0'])::before,
+.mazo[data-restantes='2']::after {
+  opacity: 1;
+}
+
+.hoja {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: var(--e-7) clamp(1.25rem, 5vw, 3.5rem) var(--e-7);
+  border: var(--borde);
+  background-color: var(--papel);
+  /* pliegues de una carta doblada en tres */
+  background-image:
+    linear-gradient(
+      transparent calc(33.3% - 1px),
+      color-mix(in srgb, var(--tinta) 7%, transparent) calc(33.3% - 1px) 33.3%,
+      transparent 33.3% calc(66.6% - 1px),
+      color-mix(in srgb, var(--tinta) 7%, transparent) calc(66.6% - 1px) 66.6%,
+      transparent 66.6%
+    ),
+    linear-gradient(180deg, transparent 0 33.3%, color-mix(in srgb, var(--papel-sombra) 45%, transparent) 33.3% 66.6%, transparent 66.6%);
+  box-shadow: var(--sombra-l);
+  rotate: -0.6deg;
+  animation: desplegar 0.9s var(--ease-papel) both;
+  outline: none;
+}
+
+.hoja[data-paso='adelante'] {
+  animation: pasarAdelante 0.6s var(--ease-papel) both;
+}
+
+.hoja[data-paso='atras'] {
+  animation: pasarAtras 0.6s var(--ease-papel) both;
+}
+
+/* La hoja siguiente sale del mazo de la derecha; la anterior vuelve desde la izquierda */
+@keyframes pasarAdelante {
+  from {
+    opacity: 0;
+    transform: translate(55%, 24px) rotate(9deg);
+  }
+  45% {
+    opacity: 1;
+  }
+}
+
+@keyframes pasarAtras {
+  from {
+    opacity: 0;
+    transform: translate(-55%, 24px) rotate(-9deg);
+  }
+  45% {
+    opacity: 1;
+  }
+}
+
+.hoja:not([data-paso='desplegar']) :is(.saludo, .parrafo, .despedida, .firma, .posdata) {
+  animation-delay: calc(0.18s + var(--n) * 0.05s);
+}
+
+@keyframes desplegar {
+  from {
+    clip-path: inset(0 -24px 100% -24px);
+    transform: translateY(60px) rotate(-3deg);
+  }
+  to {
+    clip-path: inset(-40px -24px -24px -24px);
+    transform: none;
+  }
+}
+
+.selloHoja {
+  position: absolute;
+  top: -34px;
+  right: -12px;
+  width: clamp(84px, 20vw, 118px);
+  rotate: 14deg;
+}
+
+.membrete {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--e-3);
+  margin-bottom: var(--e-6);
+  padding-bottom: var(--e-3);
+  padding-right: clamp(60px, 16vw, 110px);
+  border-bottom: 2px dashed var(--tinta);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.saludo,
+.parrafo,
+.despedida,
+.firma,
+.posdata {
+  animation: linea 0.55s var(--ease-papel) calc(0.5s + var(--n) * 0.09s) both;
+}
+
+@keyframes linea {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.saludo {
+  margin-bottom: var(--e-5);
+  font-family: var(--f-display);
+  font-weight: 750;
+  font-stretch: 88%;
+  font-size: var(--t-xl);
+  line-height: 1;
+}
+
+.parrafo {
+  margin-bottom: 1.1em;
+  font-size: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+  line-height: 1.68;
+  font-weight: 450;
+  text-wrap: pretty;
+}
+
+.despedida {
+  margin-top: var(--e-6);
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-stretch: 90%;
+  font-size: var(--t-l);
+  line-height: 1.2;
+}
+
+.firma {
+  display: inline-block;
+  margin-top: var(--e-3);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: var(--t-xl);
+  line-height: 1;
+  color: var(--tomate);
+  -webkit-text-stroke: 1.5px var(--tinta);
+  rotate: -4deg;
+}
+
+.posdata {
+  margin-top: var(--e-6);
+  padding-top: var(--e-4);
+  border-top: 2px dashed color-mix(in srgb, var(--tinta) 40%, transparent);
+  font-size: var(--t-m);
+}
+
+.folio {
+  flex: none;
+  padding: 0 0.5em;
+  background: var(--tinta);
+  color: var(--papel);
+  border-radius: 3px;
+}
+
+/* ── Pasar de hoja ───────────────────────────────────── */
+.paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-3);
+  margin-top: var(--e-6);
+  padding-top: var(--e-4);
+  border-top: 2px dashed var(--tinta);
+}
+
+.contadorHojas {
+  order: -1;
+  flex-basis: 100%;
+  text-align: center;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pasar:disabled {
+  opacity: 0.35;
+  box-shadow: none;
+  transform: none;
+  cursor: default;
+}
+
+.pasarSiguiente:not(:disabled) {
+  background: var(--tomate);
+  color: var(--papel);
+}
+
+@media (min-width: 520px) {
+  .contadorHojas {
+    order: 0;
+    flex-basis: auto;
+  }
+}
+
+@media (min-width: 900px) {
+  .rejilla {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    column-gap: var(--e-8);
+    align-items: start;
+  }
+
+  .zonaSobre,
+  .mazo {
+    grid-column: 2;
+  }
+
+  .zonaSobre {
+    padding-top: var(--e-8);
+  }
+
+  .cabeza {
+    position: sticky;
+    top: var(--e-8);
+  }
+}

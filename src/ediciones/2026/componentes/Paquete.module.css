@@ -1,0 +1,1154 @@
+/*
+ * Paquete de regalo ilustrado con CSS.
+ * Caja en proyección oblicua: frente + lateral inclinado (skewY) + tapa con su lateral.
+ * Variables: --w (ancho), --h (alto de la caja), --papel-regalo, --cinta-regalo, --duracion.
+ * El estado final de cada apertura coincide con [data-estado='abierto'] → sin saltos.
+ */
+
+.paquete {
+  --w: 150px;
+  --h: calc(var(--w) * 0.72);
+  --lado: color-mix(in srgb, var(--papel-regalo) 66%, var(--tinta));
+  --tinta-estampado: color-mix(in srgb, var(--papel) 46%, transparent);
+  /* posiciones finales compartidas por estados y animaciones */
+  --tapa-abierta: translate(-16%, -70%) rotate(-24deg);
+  --mono-suelo: translate(calc(var(--w) * 0.5), calc(var(--h) + var(--w) * 0.11)) rotate(100deg) scale(0.82);
+
+  position: relative;
+  display: block;
+  width: var(--w);
+  height: calc(var(--h) + var(--w) * 0.62);
+  padding: 0;
+  border: 0;
+  background: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  rotate: var(--giro, 0deg);
+  transition:
+    opacity 0.5s ease,
+    transform 0.6s var(--ease-salto);
+}
+
+.paquete[data-forma='alta'] {
+  --h: calc(var(--w) * 0.98);
+}
+
+.paquete[data-forma='baja'] {
+  --h: calc(var(--w) * 0.5);
+}
+
+.paquete[data-forma='sobre'] {
+  --h: calc(var(--w) * 0.66);
+  height: calc(var(--h) + var(--w) * 0.5);
+}
+
+/* Papel claro → estampado y lateral en tinta suave */
+.paquete:is([data-papel='papel'], [data-papel='girasol'], [data-papel='menta']) {
+  --tinta-estampado: color-mix(in srgb, var(--tinta) 16%, transparent);
+}
+
+.paquete[data-papel='tinta'] {
+  --lado: color-mix(in srgb, var(--tinta) 78%, var(--papel));
+  --tinta-estampado: color-mix(in srgb, var(--papel) 16%, transparent);
+}
+
+/* La tapa de una caja negra se separa del cuerpo con un tono más claro */
+.paquete[data-papel='tinta'] .tapaFrente {
+  background-color: color-mix(in srgb, var(--tinta) 86%, var(--papel));
+  border-color: var(--tinta);
+}
+
+/* El regalo principal deja ver unos rayos tenues antes de abrirse: importa, sin decirlo */
+.paquete[data-apertura='destacado'][data-estado='cerrado'] .rayos {
+  opacity: 0.35;
+  transform: scale(0.82);
+}
+
+.paquete:focus-visible {
+  outline-offset: 10px;
+}
+
+.sombra {
+  position: absolute;
+  left: 4%;
+  bottom: -11px;
+  width: 98%;
+  height: 16px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tinta) 82%, transparent);
+  transition: transform 0.3s var(--ease-salto);
+}
+
+.cuerpo {
+  position: absolute;
+  inset: 0;
+  transform-origin: 45% 100%;
+  transition: transform 0.3s var(--ease-salto);
+}
+
+/* ── Caja ─────────────────────────────────────────────── */
+.caja {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--h);
+}
+
+.frente {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: 0;
+  width: 84%;
+  height: 100%;
+  border: var(--borde);
+  border-radius: 3px;
+  background-color: var(--papel-regalo);
+  overflow: hidden;
+}
+
+.paquete[data-estampado='lunares'] .frente,
+.paquete[data-estampado='lunares'] .tapaFrente {
+  background-image: radial-gradient(var(--tinta-estampado) 22%, transparent 25%);
+  background-size: 16px 16px;
+}
+
+.paquete[data-estampado='rayas'] .frente,
+.paquete[data-estampado='rayas'] .tapaFrente {
+  background-image: repeating-linear-gradient(-45deg, var(--tinta-estampado) 0 6px, transparent 6px 14px);
+}
+
+.paquete[data-estampado='cuadros'] .frente,
+.paquete[data-estampado='cuadros'] .tapaFrente {
+  background-image:
+    linear-gradient(90deg, var(--tinta-estampado) 50%, transparent 50%),
+    linear-gradient(var(--tinta-estampado) 50%, transparent 50%);
+  background-size: 18px 18px;
+}
+
+.lado {
+  position: absolute;
+  z-index: 1;
+  left: calc(84% - 3px);
+  bottom: 0;
+  width: 16%;
+  height: 100%;
+  border: var(--borde);
+  background: var(--lado);
+  transform-origin: 0 100%;
+  transform: skewY(-38deg);
+}
+
+.lado::after {
+  content: '';
+  position: absolute;
+  inset: 0 30%;
+  background: color-mix(in srgb, var(--cinta-regalo) 80%, var(--tinta));
+}
+
+.cintaV {
+  position: absolute;
+  left: 42%;
+  top: 0;
+  bottom: 0;
+  width: 16%;
+  background: var(--cinta-regalo);
+  border-inline: 3px solid var(--tinta);
+  transform-origin: 50% 0;
+  transition: transform 0.3s ease;
+}
+
+/* Papel de seda que asoma al abrir */
+.interior {
+  position: absolute;
+  z-index: 1;
+  left: 8%;
+  top: 2px;
+  width: 68%;
+  height: calc(var(--w) * 0.34);
+}
+
+.interior i {
+  position: absolute;
+  inset: 0;
+  background: var(--papel);
+  clip-path: polygon(0 34%, 9% 0, 18% 30%, 28% 4%, 38% 32%, 50% 0, 61% 30%, 72% 2%, 82% 32%, 92% 0, 100% 30%, 100% 100%, 0 100%);
+}
+
+.interior i + i {
+  inset: 14% 10% 0 -6%;
+  background: var(--cinta-regalo);
+  transform: rotate(-6deg);
+}
+
+/* Muñeco de resorte (apertura misterio) */
+.muelle {
+  position: absolute;
+  z-index: 1;
+  left: calc(42% - var(--w) * 0.15);
+  bottom: calc(100% - 6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(var(--w) * 0.3);
+  height: calc(var(--w) * 0.62);
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
+}
+
+.muelle svg {
+  flex: 1;
+  width: 40%;
+  fill: none;
+  stroke: var(--tinta);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.muelle b {
+  order: -1;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  border: var(--borde);
+  border-radius: 50%;
+  background: var(--cinta-regalo);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: calc(var(--w) * 0.18);
+  line-height: 1;
+  color: var(--tinta);
+}
+
+/* ── Tapa y moño ──────────────────────────────────────── */
+.tapa {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: calc(var(--h) - 3px);
+  width: 100%;
+  height: calc(var(--w) * 0.2);
+  transform-origin: 30% 100%;
+}
+
+.tapaFrente {
+  position: absolute;
+  z-index: 2;
+  left: -4%;
+  top: 0;
+  width: 92%;
+  height: 100%;
+  border: var(--borde);
+  border-radius: 4px;
+  background-color: var(--papel-regalo);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--tinta) 30%, transparent);
+  overflow: hidden;
+}
+
+.tapaLado {
+  position: absolute;
+  z-index: 1;
+  left: calc(88% - 3px);
+  top: 0;
+  width: 16%;
+  height: 100%;
+  border: var(--borde);
+  background: var(--lado);
+  transform-origin: 0 100%;
+  transform: skewY(-38deg);
+}
+
+.mono {
+  position: absolute;
+  z-index: 4;
+  left: calc(var(--w) * 0.2);
+  bottom: calc(var(--h) + var(--w) * 0.11);
+  width: calc(var(--w) * 0.44);
+  overflow: visible;
+  transform-origin: 50% 60%;
+}
+
+/* ── Etiqueta colgante ────────────────────────────────── */
+.etiqueta {
+  position: absolute;
+  z-index: 5;
+  left: -10%;
+  top: calc(100% - var(--h) + var(--w) * 0.08);
+  max-width: 82%;
+  padding: 0.32em 0.6em 0.3em 1.25em;
+  border: var(--borde-fino);
+  border-radius: 3px 10px 10px 3px;
+  background: var(--papel);
+  box-shadow: 2px 2px 0 var(--tinta);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 85%;
+  font-size: clamp(0.6875rem, 0.62rem + 0.25vw, 0.8125rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--tinta);
+  rotate: -9deg;
+  transform-origin: 0 50%;
+  transition: rotate 0.4s var(--ease-salto);
+}
+
+.etiqueta::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border: 2px solid var(--tinta);
+  border-radius: 50%;
+}
+
+.paquete[data-forma='sobre'] .etiqueta {
+  top: calc(100% - var(--h) - 0.6em);
+  max-width: 58%;
+}
+
+.paquete[data-apertura='destacado'] .etiqueta {
+  background: var(--tomate);
+  color: var(--papel);
+  font-size: clamp(0.8125rem, 0.7rem + 0.4vw, 1rem);
+  padding: 0.4em 0.75em 0.38em 1.4em;
+}
+
+.paquete[data-apertura='destacado'] .etiqueta::before {
+  background: var(--papel);
+}
+
+.candado {
+  position: absolute;
+  z-index: 6;
+  left: calc(42% - 18px);
+  bottom: calc(var(--h) * 0.5 - 18px);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: var(--borde-fino);
+  border-radius: 50%;
+  background: var(--papel);
+  box-shadow: 2px 2px 0 var(--tinta);
+}
+
+/* ── Sobre ────────────────────────────────────────────── */
+.sobreFondo,
+.cartita,
+.sobreBolsillo,
+.sobreSolapa {
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+.sobreFondo {
+  bottom: 0;
+  height: var(--h);
+  border: var(--borde);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--papel-regalo) 82%, var(--tinta));
+}
+
+.cartita {
+  z-index: 1;
+  left: 9%;
+  width: 82%;
+  bottom: 7%;
+  height: calc(var(--h) * 0.84);
+  display: flex;
+  flex-direction: column;
+  gap: 10%;
+  padding: 12% 10%;
+  border: var(--borde-fino);
+  border-radius: 3px;
+  background: var(--papel);
+}
+
+.cartita i {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--tinta) 22%, transparent);
+}
+
+.cartita i:nth-child(2) {
+  width: 75%;
+}
+
+.cartita i:nth-child(3) {
+  width: 50%;
+}
+
+.sobreBolsillo {
+  z-index: 2;
+  bottom: 0;
+  height: var(--h);
+  overflow: visible;
+}
+
+.sobreSolapa {
+  z-index: 3;
+  bottom: calc(var(--h) * 0.4);
+  height: calc(var(--h) * 0.6);
+  overflow: visible;
+  transform-origin: 50% 0;
+}
+
+.sobreBolsillo path,
+.sobreSolapa path {
+  fill: var(--papel-regalo);
+  stroke: var(--tinta);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.sobreSolapa path {
+  fill: color-mix(in srgb, var(--papel-regalo) 90%, var(--tinta));
+}
+
+.pegatina {
+  position: absolute;
+  z-index: 4;
+  left: calc(50% - var(--w) * 0.13);
+  bottom: calc(var(--h) * 0.4 - var(--w) * 0.13);
+  display: grid;
+  place-items: center;
+  width: calc(var(--w) * 0.26);
+  aspect-ratio: 1;
+  border: var(--borde);
+  border-radius: 50%;
+  background: var(--cinta-regalo);
+  box-shadow: 2px 2px 0 var(--tinta);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: calc(var(--w) * 0.085);
+  color: var(--papel);
+  transform-origin: 20% 20%;
+}
+
+/* ── Rayos del regalo principal (trama de risografía, no brillo) ── */
+.rayos {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 58%;
+  width: calc(var(--w) * 2.1);
+  aspect-ratio: 1;
+  margin: calc(var(--w) * -1.05) 0 0 calc(var(--w) * -1.05);
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--papel) 0 8deg, transparent 8deg 16deg);
+  mask: radial-gradient(circle, #000 30%, transparent 70%);
+  -webkit-mask: radial-gradient(circle, #000 30%, transparent 70%);
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+}
+
+/* ── Interacción ──────────────────────────────────────── */
+.paquete[data-estado='cerrado']:hover .cuerpo {
+  transform: rotate(-3deg) translateY(-6px);
+}
+
+.paquete[data-estado='cerrado']:hover .sombra {
+  transform: scaleX(0.86);
+}
+
+.paquete[data-estado='cerrado']:hover .etiqueta {
+  rotate: -16deg;
+}
+
+.paquete[data-estado='cerrado']:hover .mono {
+  transform: rotate(-8deg) scale(1.06);
+  transition: transform 0.3s var(--ease-salto);
+}
+
+.paquete[data-estado='cerrado']:active .cuerpo,
+.paquete[data-estado='abierto']:active .cuerpo {
+  transform: scale(1.04, 0.92);
+  transition-duration: 0.08s;
+}
+
+.paquete[data-estado='abierto']:hover .cuerpo {
+  transform: translateY(-4px);
+}
+
+.paquete[data-negado='true'] .cuerpo {
+  animation: no 0.5s ease both;
+}
+
+@keyframes no {
+  20% {
+    transform: translateX(-7px) rotate(-3deg);
+  }
+  40% {
+    transform: translateX(6px) rotate(3deg);
+  }
+  60% {
+    transform: translateX(-4px) rotate(-2deg);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+/* ── Estado abierto (también es el último fotograma de cada apertura) ── */
+.paquete[data-estado='abierto'] .tapa {
+  transform: var(--tapa-abierta);
+}
+
+.paquete[data-estado='abierto'] .mono {
+  transform: var(--mono-suelo);
+}
+
+.paquete[data-estado='abierto'] .frente .cintaV {
+  transform: scaleY(0);
+}
+
+.paquete[data-estado='abierto'] .interior {
+  transform: translateY(-62%);
+}
+
+.paquete[data-estado='abierto'] .muelle {
+  transform: scaleY(1);
+}
+
+.paquete[data-estado='abierto'] .pegatina {
+  transform: translate(calc(var(--w) * 0.4), calc(var(--h) * -0.42)) rotate(28deg) scale(0.8);
+}
+
+.paquete[data-estado='abierto'] .sobreSolapa {
+  z-index: 0;
+  transform: perspective(500px) rotateX(180deg);
+}
+
+.paquete[data-estado='abierto'] .cartita {
+  transform: translateY(-46%);
+}
+
+.paquete[data-estado='abierto'] .rayos {
+  opacity: 0.75;
+  transform: scale(1) rotate(30deg);
+}
+
+/* ── Aperturas ────────────────────────────────────────── */
+.paquete[data-estado='abriendo'] :is(.cuerpo, .sombra, .tapa, .mono, .frente .cintaV, .interior, .muelle, .pegatina, .sobreSolapa, .cartita, .rayos) {
+  animation-duration: var(--duracion);
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
+}
+
+/* A · Moño clásico: anticipación, la cinta se desata, el moño cae, la tapa sube */
+.paquete[data-apertura='mono'][data-estado='abriendo'] .cuerpo {
+  animation-name: a-cuerpo;
+}
+.paquete[data-apertura='mono'][data-estado='abriendo'] .frente .cintaV {
+  animation-name: a-cinta;
+}
+.paquete[data-apertura='mono'][data-estado='abriendo'] .mono {
+  animation-name: a-mono;
+}
+.paquete[data-apertura='mono'][data-estado='abriendo'] .tapa {
+  animation-name: a-tapa;
+}
+.paquete[data-apertura='mono'][data-estado='abriendo'] .interior {
+  animation-name: a-interior;
+}
+
+@keyframes a-cuerpo {
+  10% {
+    transform: rotate(-5deg) scale(1.03, 0.95);
+  }
+  22% {
+    transform: rotate(4deg);
+  }
+  32% {
+    transform: rotate(-2deg);
+  }
+  42%,
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes a-cinta {
+  0%,
+  18% {
+    transform: none;
+  }
+  26% {
+    transform: scaleX(0.55);
+  }
+  33% {
+    transform: scaleX(1.2);
+  }
+  48%,
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes a-mono {
+  0%,
+  14% {
+    transform: none;
+  }
+  22% {
+    transform: rotate(-18deg) scale(1.12);
+  }
+  30% {
+    transform: rotate(14deg) scale(1.05);
+  }
+  38% {
+    transform: translateY(-40%) rotate(-10deg);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5);
+  }
+  70% {
+    transform: var(--mono-suelo);
+    animation-timing-function: ease-out;
+  }
+  79% {
+    transform: translate(calc(var(--w) * 0.5), calc(var(--h) + var(--w) * 0.02)) rotate(94deg) scale(0.82);
+    animation-timing-function: ease-in;
+  }
+  88%,
+  100% {
+    transform: var(--mono-suelo);
+  }
+}
+
+@keyframes a-tapa {
+  0%,
+  44% {
+    transform: none;
+  }
+  62% {
+    transform: translateY(-120%) rotate(-6deg);
+  }
+  84% {
+    transform: translate(-16%, -60%) rotate(-28deg);
+  }
+  100% {
+    transform: var(--tapa-abierta);
+  }
+}
+
+@keyframes a-interior {
+  0%,
+  55% {
+    transform: none;
+  }
+  82% {
+    transform: translateY(-78%);
+  }
+  100% {
+    transform: translateY(-62%);
+  }
+}
+
+/* B · Caja sorpresa: tiembla, se aplasta y la tapa sale disparada */
+.paquete[data-apertura='sorpresa'][data-estado='abriendo'] .cuerpo {
+  animation-name: b-cuerpo;
+}
+.paquete[data-apertura='sorpresa'][data-estado='abriendo'] .tapa {
+  animation-name: b-tapa;
+}
+.paquete[data-apertura='sorpresa'][data-estado='abriendo'] .mono {
+  animation-name: b-mono;
+}
+.paquete[data-apertura='sorpresa'][data-estado='abriendo'] .frente .cintaV {
+  animation-name: corta-cinta;
+}
+.paquete[data-apertura='sorpresa'][data-estado='abriendo'] .interior {
+  animation-name: b-interior;
+}
+
+@keyframes b-cuerpo {
+  6% {
+    transform: translateX(-4px) rotate(-3deg);
+  }
+  12% {
+    transform: translateX(4px) rotate(3deg);
+  }
+  18% {
+    transform: translateX(-5px) rotate(-4deg);
+  }
+  24% {
+    transform: translateX(5px) rotate(4deg);
+  }
+  30% {
+    transform: translateX(-6px) rotate(-5deg);
+  }
+  36% {
+    transform: translateX(6px) rotate(5deg);
+  }
+  43% {
+    transform: scale(1.12, 0.82);
+  }
+  53% {
+    transform: scale(0.93, 1.1);
+  }
+  65% {
+    transform: scale(1.03, 0.97);
+  }
+  75%,
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes b-tapa {
+  0%,
+  44% {
+    transform: none;
+  }
+  47% {
+    transform: translateY(10%);
+    animation-timing-function: cubic-bezier(0.1, 0.7, 0.3, 1);
+  }
+  63% {
+    transform: translate(-8%, -340%) rotate(-40deg);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.6);
+  }
+  81% {
+    transform: translate(-16%, -56%) rotate(-20deg);
+    animation-timing-function: ease-out;
+  }
+  90% {
+    transform: translate(-16%, -84%) rotate(-26deg);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: var(--tapa-abierta);
+  }
+}
+
+@keyframes b-mono {
+  0%,
+  45% {
+    transform: none;
+  }
+  64% {
+    transform: translate(20%, -460%) rotate(-200deg);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.6);
+  }
+  88% {
+    transform: var(--mono-suelo);
+  }
+  94% {
+    transform: translate(calc(var(--w) * 0.5), calc(var(--h) + var(--w) * 0.05)) rotate(96deg) scale(0.82);
+  }
+  100% {
+    transform: var(--mono-suelo);
+  }
+}
+
+@keyframes corta-cinta {
+  0%,
+  44% {
+    transform: none;
+  }
+  50%,
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes b-interior {
+  0%,
+  48% {
+    transform: none;
+  }
+  66% {
+    transform: translateY(-95%);
+  }
+  80% {
+    transform: translateY(-52%);
+  }
+  100% {
+    transform: translateY(-62%);
+  }
+}
+
+/* C · Sobre: la pegatina se despega, la solapa gira, la carta sube */
+.paquete[data-apertura='sobre'][data-estado='abriendo'] .cuerpo {
+  animation-name: c-cuerpo;
+}
+.paquete[data-apertura='sobre'][data-estado='abriendo'] .pegatina {
+  animation-name: c-pegatina;
+}
+.paquete[data-apertura='sobre'][data-estado='abriendo'] .sobreSolapa {
+  animation-name: c-solapa;
+  animation-timing-function: linear;
+}
+.paquete[data-apertura='sobre'][data-estado='abriendo'] .cartita {
+  animation-name: c-cartita;
+}
+
+@keyframes c-cuerpo {
+  6% {
+    transform: scale(1.03) rotate(-1deg);
+  }
+  14%,
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes c-pegatina {
+  0% {
+    transform: none;
+  }
+  10% {
+    transform: rotate(-14deg) translateY(-4%);
+  }
+  30% {
+    transform: translate(calc(var(--w) * 0.4), calc(var(--h) * -0.6)) rotate(40deg) scale(0.9);
+  }
+  42%,
+  100% {
+    transform: translate(calc(var(--w) * 0.4), calc(var(--h) * -0.42)) rotate(28deg) scale(0.8);
+  }
+}
+
+@keyframes c-solapa {
+  0%,
+  26% {
+    transform: perspective(500px) rotateX(0deg);
+    z-index: 3;
+  }
+  40% {
+    transform: perspective(500px) rotateX(90deg);
+    z-index: 3;
+  }
+  41% {
+    transform: perspective(500px) rotateX(94deg);
+    z-index: 0;
+  }
+  56%,
+  100% {
+    transform: perspective(500px) rotateX(180deg);
+    z-index: 0;
+  }
+}
+
+@keyframes c-cartita {
+  0%,
+  44% {
+    transform: none;
+  }
+  80% {
+    transform: translateY(-58%);
+  }
+  100% {
+    transform: translateY(-46%);
+  }
+}
+
+/* D · Misterio: saltitos, giro completo, duda… y sale un muñeco de resorte */
+.paquete[data-apertura='misterio'][data-estado='abriendo'] .cuerpo {
+  animation-name: d-cuerpo;
+  animation-timing-function: linear;
+}
+.paquete[data-apertura='misterio'][data-estado='abriendo'] .sombra {
+  animation-name: d-sombra;
+  animation-timing-function: linear;
+}
+.paquete[data-apertura='misterio'][data-estado='abriendo'] .tapa {
+  animation-name: d-tapa;
+}
+.paquete[data-apertura='misterio'][data-estado='abriendo'] .mono {
+  animation-name: d-mono;
+}
+.paquete[data-apertura='misterio'][data-estado='abriendo'] .frente .cintaV {
+  animation-name: d-cinta;
+}
+.paquete[data-apertura='misterio'][data-estado='abriendo'] .muelle {
+  animation-name: d-muelle;
+}
+
+@keyframes d-cuerpo {
+  0% {
+    transform: none;
+  }
+  8% {
+    transform: translateY(-26%) rotate(-6deg);
+  }
+  15% {
+    transform: translateY(0) scale(1.08, 0.9);
+  }
+  21% {
+    transform: none;
+  }
+  31% {
+    transform: translateY(-36%) rotate(180deg);
+  }
+  41% {
+    transform: translateY(0) rotate(360deg) scale(1.1, 0.88);
+  }
+  47% {
+    transform: rotate(360deg);
+  }
+  53% {
+    transform: rotate(352deg);
+  }
+  59% {
+    transform: rotate(368deg);
+  }
+  65% {
+    transform: rotate(360deg) scale(0.92, 1.06);
+  }
+  71% {
+    transform: rotate(360deg) scale(1.12, 0.86);
+  }
+  78%,
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes d-sombra {
+  0%,
+  21%,
+  41%,
+  100% {
+    transform: none;
+  }
+  8% {
+    transform: scaleX(0.7);
+  }
+  31% {
+    transform: scaleX(0.62);
+  }
+}
+
+@keyframes d-tapa {
+  0%,
+  70% {
+    transform: none;
+  }
+  81% {
+    transform: translateY(-300%) rotate(30deg);
+  }
+  93% {
+    transform: translate(-16%, -56%) rotate(-30deg);
+  }
+  100% {
+    transform: var(--tapa-abierta);
+  }
+}
+
+@keyframes d-mono {
+  0%,
+  70% {
+    transform: none;
+  }
+  80% {
+    transform: translate(-30%, -340%) rotate(-120deg);
+    animation-timing-function: ease-in;
+  }
+  94%,
+  100% {
+    transform: var(--mono-suelo);
+  }
+}
+
+@keyframes d-cinta {
+  0%,
+  70% {
+    transform: none;
+  }
+  74%,
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes d-muelle {
+  0%,
+  72% {
+    transform: scaleY(0);
+  }
+  82% {
+    transform: scaleY(1.28);
+  }
+  88% {
+    transform: scaleY(0.84);
+  }
+  94% {
+    transform: scaleY(1.07);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+/* ★ Regalo principal: redoble, la cinta se suelta, el moño sale volando, la tapa gira y aparecen los rayos */
+.paquete[data-apertura='destacado'][data-estado='abriendo'] .cuerpo {
+  animation-name: e-cuerpo;
+  animation-timing-function: linear;
+}
+.paquete[data-apertura='destacado'][data-estado='abriendo'] .frente .cintaV {
+  animation-name: e-cinta;
+}
+.paquete[data-apertura='destacado'][data-estado='abriendo'] .mono {
+  animation-name: e-mono;
+}
+.paquete[data-apertura='destacado'][data-estado='abriendo'] .tapa {
+  animation-name: e-tapa;
+}
+.paquete[data-apertura='destacado'][data-estado='abriendo'] .interior {
+  animation-name: e-interior;
+}
+.paquete[data-apertura='destacado'][data-estado='abriendo'] .rayos {
+  animation-name: e-rayos;
+}
+
+@keyframes e-cuerpo {
+  0% {
+    transform: none;
+  }
+  4% {
+    transform: rotate(-1.5deg);
+  }
+  8% {
+    transform: rotate(1.5deg);
+  }
+  12% {
+    transform: rotate(-2.5deg);
+  }
+  16% {
+    transform: rotate(2.5deg);
+  }
+  20% {
+    transform: rotate(-3.5deg);
+  }
+  24% {
+    transform: rotate(3.5deg) translateY(-1%);
+  }
+  28% {
+    transform: rotate(-4.5deg) translateY(-2%);
+  }
+  32% {
+    transform: rotate(4.5deg) translateY(-2%);
+  }
+  38% {
+    transform: scale(1.14, 0.82);
+  }
+  48% {
+    transform: scale(0.93, 1.12) translateY(-8%);
+  }
+  58% {
+    transform: scale(1.05, 0.95);
+  }
+  66%,
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes e-cinta {
+  0%,
+  34% {
+    transform: none;
+  }
+  40% {
+    transform: scaleX(1.35);
+  }
+  50%,
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes e-mono {
+  0%,
+  30% {
+    transform: none;
+  }
+  36% {
+    transform: rotate(-24deg) scale(1.22);
+  }
+  44% {
+    transform: translate(-40%, -240%) rotate(-200deg) scale(1.1);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5);
+  }
+  70% {
+    transform: var(--mono-suelo);
+    animation-timing-function: ease-out;
+  }
+  78% {
+    transform: translate(calc(var(--w) * 0.5), calc(var(--h) + var(--w) * 0.02)) rotate(92deg) scale(0.82);
+    animation-timing-function: ease-in;
+  }
+  86%,
+  100% {
+    transform: var(--mono-suelo);
+  }
+}
+
+@keyframes e-tapa {
+  0%,
+  44% {
+    transform: none;
+  }
+  47% {
+    transform: translateY(8%);
+  }
+  63% {
+    transform: translate(-6%, -430%) rotate(200deg);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.6);
+  }
+  84% {
+    transform: translate(-16%, -58%) rotate(-30deg);
+    animation-timing-function: ease-out;
+  }
+  92% {
+    transform: translate(-16%, -80%) rotate(-21deg);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: var(--tapa-abierta);
+  }
+}
+
+@keyframes e-interior {
+  0%,
+  52% {
+    transform: none;
+  }
+  70% {
+    transform: translateY(-100%);
+  }
+  83% {
+    transform: translateY(-52%);
+  }
+  100% {
+    transform: translateY(-62%);
+  }
+}
+
+@keyframes e-rayos {
+  0%,
+  56% {
+    opacity: 0;
+    transform: scale(0) rotate(-40deg);
+  }
+  76% {
+    opacity: 0.85;
+    transform: scale(1.12) rotate(18deg);
+  }
+  100% {
+    opacity: 0.75;
+    transform: scale(1) rotate(30deg);
+  }
+}

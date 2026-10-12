@@ -1,0 +1,17 @@
+node_modules
+dist
+*.local
+playwright-report
+test-results
+capturas
+.DS_Store
+dist-estres
+
+# ── Privado: tus textos y fotos reales, y la palabra secreta ──
+# Nunca se suben. Se publican cifrados en public/privado/ con `npm run cifrar`.
+/privado/
+.env
+.env.*
+!.env.ejemplo
+dist-prueba
+dist-real

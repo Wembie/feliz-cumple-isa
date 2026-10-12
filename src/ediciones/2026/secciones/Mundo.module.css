@@ -1,0 +1,305 @@
+/* MOMENTO 3 · Nuestro pequeño mundo — fondo papel, acento menta, cintas girasol. */
+
+.mundo {
+  position: relative;
+  padding-block: var(--e-8) var(--e-9);
+  background: var(--papel);
+  border-top: var(--borde);
+  overflow: clip;
+}
+
+/* ── Titular ─────────────────────────────────────────── */
+.cabeza {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-5);
+}
+
+.cabezaTitulo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-4);
+}
+
+.numero {
+  color: var(--tinta);
+  margin-bottom: calc(-1 * var(--e-2));
+}
+
+.titulo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: var(--f-display);
+  font-weight: 800;
+  line-height: 0.82;
+}
+
+.tituloPequeno {
+  font-weight: 650;
+  font-stretch: 80%;
+  font-size: var(--t-xl);
+}
+
+.tituloGrande {
+  font-stretch: 75%;
+  font-size: clamp(4.4rem, 1.8rem + 12vw, 10.5rem);
+  letter-spacing: -0.035em;
+}
+
+.tituloEtiqueta {
+  align-self: flex-end;
+  margin-top: -0.18em;
+  margin-right: -0.1em;
+  padding: 0.08em 0.42em 0.14em;
+  border: var(--borde);
+  border-radius: 999px;
+  background: var(--menta);
+  box-shadow: var(--sombra-m);
+  font-stretch: 90%;
+  font-size: clamp(2rem, 1.2rem + 3.6vw, 4.2rem);
+  rotate: 5deg;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  max-width: 34ch;
+  font-size: var(--t-m);
+  line-height: 1.5;
+}
+
+.pista {
+  align-self: flex-start;
+  padding: 0.25em 0.65em;
+  border-left: 5px solid var(--tinta);
+  background: color-mix(in srgb, var(--girasol) 55%, var(--papel));
+  font-size: var(--t-s);
+  font-weight: 600;
+}
+
+/* ── Collage ─────────────────────────────────────────── */
+.collage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-8);
+  margin: var(--e-8) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pieza {
+  position: relative;
+  width: 86%;
+}
+
+.pieza:nth-child(even) {
+  margin-left: auto;
+}
+
+.pieza[data-tipo='nota'] {
+  width: 74%;
+  margin-inline: auto;
+  translate: 0 calc(var(--desplazamiento, 0px) * 0.8);
+}
+
+.figura {
+  position: relative;
+  margin: 0;
+  rotate: var(--giro);
+  transition:
+    rotate 0.4s var(--ease-salto),
+    transform 0.7s var(--ease-papel),
+    opacity 0.45s ease;
+}
+
+.figura:hover {
+  rotate: calc(var(--giro) * 0.3);
+}
+
+.foto {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  border-radius: 4px;
+}
+
+.marco {
+  display: block;
+  aspect-ratio: var(--r);
+  padding: clamp(8px, 1.2vw, 14px);
+  border: var(--borde);
+  background: var(--papel);
+  box-shadow: var(--sombra-m);
+  overflow: hidden;
+  transition:
+    box-shadow 0.7s var(--ease-papel),
+    transform 0.25s var(--ease-salto);
+}
+
+.foto:hover .marco,
+.foto:focus-visible .marco {
+  transform: translate(-3px, -4px);
+  box-shadow: var(--sombra-l);
+}
+
+.fotoCinta {
+  top: -15px;
+  left: 50%;
+  margin-left: -55px;
+  width: 110px;
+  height: 32px;
+}
+
+.pie {
+  /* va debajo de la foto (montado sobre el borde): un pie largo baja, no tapa la foto */
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  margin: -16px 0 0 -10px;
+  max-width: 82%;
+  padding: 0.3em 0.8em 0.25em;
+  border: var(--borde-fino);
+  border-radius: 999px;
+  background: var(--menta);
+  box-shadow: var(--sombra-s);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: var(--t-s);
+  line-height: 1.2;
+  text-transform: uppercase;
+  rotate: -3deg;
+}
+
+.stickerFoto {
+  position: absolute !important;
+  z-index: 2;
+  right: -14px;
+  bottom: -56px;
+  translate: 0 calc(var(--desplazamiento, 0px) * 1.4);
+}
+
+.nota {
+  position: relative;
+  padding: var(--e-6) var(--e-5) var(--e-5);
+  border: var(--borde);
+  background-color: var(--papel);
+  background-image: repeating-linear-gradient(
+    transparent 0 calc(1.35em - 1px),
+    color-mix(in srgb, var(--tinta) 14%, transparent) calc(1.35em - 1px) 1.35em
+  );
+  box-shadow: var(--sombra-s);
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-stretch: 88%;
+  font-size: var(--t-l);
+  line-height: 1.35;
+  rotate: var(--giro);
+  transition:
+    transform 0.7s var(--ease-papel),
+    opacity 0.45s ease;
+}
+
+.notaCinta {
+  top: -14px;
+  left: 18%;
+  rotate: -8deg;
+}
+
+.tira {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--e-6);
+  margin-top: var(--e-9);
+}
+
+/* Aparición: las piezas "se colocan sobre la mesa" (solo si el JS está listo) */
+.mundo[data-listo] [data-aparece]:not([data-visible]) .figura,
+.mundo[data-listo] [data-aparece]:not([data-visible]) .nota {
+  opacity: 0;
+  transform: translateY(-26px) scale(1.08) rotate(5deg);
+}
+
+.mundo[data-listo] [data-aparece]:not([data-visible]) .marco {
+  box-shadow: 0 0 0 var(--tinta);
+}
+
+/* ── Escritorio: retícula de 12 columnas con ranuras compuestas ── */
+@media (min-width: 900px) {
+  .cabeza {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--e-8);
+  }
+
+  .intro {
+    padding-bottom: var(--e-5);
+  }
+
+  .collage {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--e-6);
+    row-gap: var(--e-8);
+    align-items: start;
+    margin-top: var(--e-9);
+  }
+
+  .pieza:nth-child(n) {
+    width: auto;
+    margin: 0;
+  }
+
+  .pieza[data-ranura='0'] {
+    grid-column: 1 / span 5;
+  }
+
+  .pieza[data-ranura='1'] {
+    grid-column: 7 / span 5;
+    margin-top: 7rem;
+  }
+
+  .pieza[data-ranura='2'] {
+    grid-column: 2 / span 3;
+    margin-top: 3rem;
+  }
+
+  .pieza[data-tipo='foto'][data-ranura='2'] {
+    grid-column: 1 / span 4;
+  }
+
+  .pieza[data-ranura='3'] {
+    grid-column: 6 / span 5;
+    margin-top: -1rem;
+  }
+
+  .pieza[data-ranura='4'] {
+    grid-column: 2 / span 5;
+    margin-top: 2rem;
+  }
+
+  .pieza[data-ranura='5'] {
+    grid-column: 8 / span 4;
+    margin-top: 6rem;
+  }
+
+  .pieza[data-tipo='nota'] .nota {
+    max-width: 380px;
+  }
+
+  .pie {
+    font-size: var(--t-m);
+  }
+
+  .stickerFoto {
+    right: -36px;
+    bottom: -40px;
+  }
+}

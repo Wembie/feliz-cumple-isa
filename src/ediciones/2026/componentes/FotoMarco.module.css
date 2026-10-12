@@ -1,0 +1,53 @@
+.imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--papel-sombra);
+}
+
+.imagen[data-ajuste='contain'] {
+  object-fit: contain;
+}
+
+.marcador {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e-2);
+  width: 100%;
+  height: 100%;
+  padding: var(--e-4);
+  background-color: var(--menta);
+  background-image: var(--trama);
+  background-size: 12px 12px;
+  outline: 2px dashed var(--tinta);
+  outline-offset: -12px;
+  color: var(--tinta);
+  text-align: center;
+}
+
+.marcadorTitulo {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(1.3rem, 1rem + 1.2vw, 1.9rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.marcadorTexto {
+  max-width: 22ch;
+  padding: 0.15em 0.5em;
+  background: var(--papel);
+  border-radius: 4px;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.cargando {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(-45deg, var(--papel-sombra) 0 10px, var(--papel) 10px 20px);
+}
