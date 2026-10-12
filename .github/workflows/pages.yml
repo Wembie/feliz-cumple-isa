@@ -78,3 +78,33 @@ jobs:
     steps:
       - id: despliegue
         uses: actions/deploy-pages@v4
+
+  # Versión nueva en VERSION (y su sección en CHANGELOG.md) → tag vX.Y.Z + release en GitHub.
+  # Si esa versión ya tiene tag, no hace nada.
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verificar-y-construir
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Crear release si la versión es nueva
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(tr -d '[:space:]' < VERSION)
+          if git rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
+            echo "v$VERSION ya existe: no hay release nuevo."
+            exit 0
+          fi
+          awk -v v="$VERSION" '
+            index($0, "## [" v "]") == 1 { dentro = 1; next }
+            dentro && /^## \[/ { exit }
+            dentro && /^\[[^]]+\]: / { exit }
+            dentro { print }
+          ' CHANGELOG.md > notas.md
+          gh release create "v$VERSION" --target "$GITHUB_SHA" --title "v$VERSION" --notes-file notas.md
