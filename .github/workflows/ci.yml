@@ -1,0 +1,60 @@
+name: CI
+
+# Todas las revisiones corren aquí, en el PR. Al hacer merge, main solo construye y publica (pages.yml).
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependencias (reproducible)
+        run: npm ci
+
+      - name: Versión coherente (VERSION, package.json y CHANGELOG)
+        run: |
+          VERSION=$(tr -d '[:space:]' < VERSION)
+          PAQUETE=$(node -p "require('./package.json').version")
+          if [ "$VERSION" != "$PAQUETE" ]; then echo "::error::VERSION ($VERSION) y package.json ($PAQUETE) no coinciden"; exit 1; fi
+          grep -q "^## \[$VERSION\]" CHANGELOG.md || { echo "::error::CHANGELOG.md no tiene la sección [$VERSION]"; exit 1; }
+
+      - name: Calidad (ESLint)
+        run: npm run lint
+
+      - name: Tipos de TypeScript
+        run: npm run typecheck
+
+      - name: Pruebas unitarias
+        run: npm test
+
+      - name: Construir el sitio
+        run: npm run build
+
+      - name: Pruebas funcionales (Playwright, con la plantilla pública)
+        run: |
+          npx playwright install --with-deps chromium
+          npm run build:prueba
+          npm run e2e
+
+      - name: Textos de cualquier largo (prueba de estrés)
+        run: npm run estres
+
+      - name: Nada personal sin cifrar en lo que se publica
+        run: |
+          test -f public/privado/2026/contenido.enc || echo "::warning::No hay contenido cifrado: ejecuta npm run cifrar y sube public/privado/"
+          if [ -d privado ]; then echo "::error::La carpeta privado/ no debe estar en el repositorio"; exit 1; fi

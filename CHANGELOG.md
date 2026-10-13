@@ -6,6 +6,13 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-12
+
+### Added
+
+- Link preview (Open Graph / Twitter card): editable texts in `src/vistaPrevia.ts` and a
+  1200 × 630 image drawn in the page style with `npm run vista-previa`.
+
 ## [1.0.0] - 2026-10-12
 
 ### Added
@@ -26,5 +33,6 @@ versions follow [Semantic Versioning](https://semver.org/).
 - Unit tests (Vitest), e2e tests (Playwright), layout stress test and a GitHub Actions
   workflow for checks and GitHub Pages deploy.
 
-[Unreleased]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Wembie/feliz-cumple-isa/releases/tag/v1.0.0
