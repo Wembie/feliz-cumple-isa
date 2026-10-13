@@ -1,7 +1,7 @@
 {
   "name": "feliz-cumple-isa",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "A one-of-a-kind interactive birthday experience made with love for Isa.",
   "scripts": {

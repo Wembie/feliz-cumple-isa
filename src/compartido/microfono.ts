@@ -3,6 +3,8 @@
  * Solo se pide permiso cuando la usuaria pulsa el botón; si falla, las velas se apagan tocándolas.
  */
 
+import { liberarMicrofono, prepararMicrofono } from './sonido'
+
 export interface EscuchaSoplido {
   detener: () => void
 }
@@ -16,9 +18,16 @@ export function microfonoDisponible(): boolean {
  * (energía alta durante varios frames seguidos). Se detiene sola tras `limiteMs`.
  */
 export async function escucharSoplido(alSoplar: () => void, limiteMs = 20000): Promise<EscuchaSoplido> {
-  const flujo = await navigator.mediaDevices.getUserMedia({
-    audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
-  })
+  prepararMicrofono()
+  let flujo: MediaStream
+  try {
+    flujo = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+    })
+  } catch (error) {
+    liberarMicrofono()
+    throw error
+  }
   const ctx = new AudioContext()
   const fuente = ctx.createMediaStreamSource(flujo)
   const analizador = ctx.createAnalyser()
@@ -50,6 +59,7 @@ export async function escucharSoplido(alSoplar: () => void, limiteMs = 20000): P
     window.clearTimeout(limite)
     flujo.getTracks().forEach((pista) => pista.stop())
     void ctx.close().catch(() => {})
+    liberarMicrofono()
   }
 
   medir()

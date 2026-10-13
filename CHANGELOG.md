@@ -6,6 +6,28 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-12
+
+### Added
+
+- Photo notes on mobile: when a note is longer than the card, a bouncing "scroll to read
+  more" hint with a fade appears; tapping it scrolls down and it hides at the end.
+  Text editable in the constants file (`MUNDO.notaDesliza`).
+
+### Changed
+
+- CI split: all checks run on pull requests (`ci.yml`); a push to `main` only builds,
+  deploys and creates the release (`pages.yml`). The release runs after a successful deploy.
+
+### Fixed
+
+- Sound was too quiet on phones: louder master gain with a limiter to avoid distortion,
+  and the lid thump now uses frequencies small speakers can play.
+- Sound stopped working on phones after using the microphone, locking the screen or
+  switching apps: the audio now resumes on the next tap or when the page is visible again,
+  and is rebuilt after the microphone is released.
+- iPhone: sound plays even with the silent switch on (audio session set to playback).
+
 ## [1.0.1] - 2026-10-12
 
 ### Added
@@ -33,6 +55,7 @@ versions follow [Semantic Versioning](https://semver.org/).
 - Unit tests (Vitest), e2e tests (Playwright), layout stress test and a GitHub Actions
   workflow for checks and GitHub Pages deploy.
 
-[Unreleased]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Wembie/feliz-cumple-isa/releases/tag/v1.0.0

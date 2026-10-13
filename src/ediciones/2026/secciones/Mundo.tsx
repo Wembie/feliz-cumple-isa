@@ -158,7 +158,7 @@ export function Mundo({ contenido }: { contenido: Contenido2026 }) {
         )}
       </div>
 
-      <VisorFoto fotos={mundo.fotos} indice={abierta} alCambiar={setAbierta} textos={{ leerNota: mundo.botonLeerNota, verFoto: mundo.botonVerFoto, fotoNoCarga: mundo.fotoNoCarga }} />
+      <VisorFoto fotos={mundo.fotos} indice={abierta} alCambiar={setAbierta} textos={{ leerNota: mundo.botonLeerNota, verFoto: mundo.botonVerFoto, desliza: mundo.notaDesliza, fotoNoCarga: mundo.fotoNoCarga }} />
     </section>
   )
 }
