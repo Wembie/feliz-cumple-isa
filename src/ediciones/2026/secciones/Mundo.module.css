@@ -99,6 +99,11 @@
   margin-left: auto;
 }
 
+.pieza[data-tipo='foto'] {
+  /* el sticker decide dónde va según el ancho de SU foto (ver @container más abajo) */
+  container: foto / inline-size;
+}
+
 .pieza[data-tipo='nota'] {
   width: 74%;
   margin-inline: auto;
@@ -176,12 +181,13 @@
   rotate: -3deg;
 }
 
+/* Celular: el sticker va debajo del pie de foto (a la derecha), así nunca lo tapa por largo que sea. */
 .stickerFoto {
-  position: absolute !important;
   z-index: 2;
-  right: -14px;
-  bottom: -56px;
-  translate: 0 calc(var(--desplazamiento, 0px) * 1.4);
+  width: fit-content;
+  margin: var(--e-5) var(--e-2) 0 auto;
+  /* parallax con tope: en secciones largas no se va lejos de su foto */
+  translate: 0 clamp(-12px, calc(var(--desplazamiento, 0px) * 0.6), 12px);
 }
 
 .nota {
@@ -295,11 +301,38 @@
   }
 
   .pie {
+    /* deja libre la esquina donde cuelga el sticker: un pie largo baja de línea en vez de chocar */
+    max-width: 62%;
     font-size: var(--t-m);
   }
 
+  /* Escritorio: cuelga de la esquina de la foto, como pegado encima. */
   .stickerFoto {
+    position: absolute !important;
     right: -36px;
     bottom: -40px;
+    margin: 0;
+    translate: 0 clamp(-36px, calc(var(--desplazamiento, 0px) * 1.4), 36px);
+  }
+
+  /* La última foto lleva su sticker colgando por debajo: espacio para que no se corte. */
+  .pieza[data-tipo='foto']:last-child:has(.stickerFoto) {
+    margin-bottom: var(--e-8);
+  }
+}
+
+/* Foto angosta (columna estrecha en escritorio): no cabe el sticker en la esquina sin tapar el pie,
+   así que va debajo, como en el celular. */
+@container foto (max-width: 480px) {
+  .stickerFoto {
+    position: relative !important;
+    right: auto;
+    bottom: auto;
+    margin: var(--e-5) var(--e-2) 0 auto;
+    translate: 0 clamp(-12px, calc(var(--desplazamiento, 0px) * 0.6), 12px);
+  }
+
+  .pie {
+    max-width: 82%;
   }
 }

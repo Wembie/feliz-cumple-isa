@@ -6,6 +6,16 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-10-12
+
+### Fixed
+
+- Photo collage: secret stickers no longer cover the photo caption. On phones and narrow
+  photo columns the sticker sits below the caption; on wide columns it hangs from the corner
+  and long captions wrap before reaching it.
+- The sticker on the last photo is no longer cut off at the end of the section, and its
+  scroll parallax is capped so it stays next to its photo.
+
 ## [1.0.2] - 2026-10-12
 
 ### Added
@@ -55,7 +65,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 - Unit tests (Vitest), e2e tests (Playwright), layout stress test and a GitHub Actions
   workflow for checks and GitHub Pages deploy.
 
-[Unreleased]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/Wembie/feliz-cumple-isa/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Wembie/feliz-cumple-isa/releases/tag/v1.0.0
