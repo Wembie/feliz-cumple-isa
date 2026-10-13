@@ -8,6 +8,12 @@ export type Efecto = 'pop' | 'sticker' | 'soplo' | 'papel' | 'confeti' | 'ding' 
 
 const CLAVE = 'isa:sonido'
 
+/**
+ * Ganancia general: los parlantes del celular son pequeños, así que se sube bastante y un
+ * limitador (compresor) evita que se distorsione cuando suenan varios efectos a la vez.
+ */
+const REFUERZO = 1.8
+
 let contexto: AudioContext | null = null
 let salida: GainNode | null = null
 let ruido: AudioBuffer | null = null
@@ -36,7 +42,7 @@ export function sonidoActivo(): boolean {
 
 export function configurarVolumen(v: number): void {
   volumen = Math.min(1, Math.max(0, v))
-  if (salida) salida.gain.value = volumen * 0.5
+  if (salida) salida.gain.value = volumen * REFUERZO
 }
 
 export function suscribirSonido(oyente: (activo: boolean) => void): () => void {
@@ -60,20 +66,85 @@ export function activarSonido(valor: boolean): void {
 
 function asegurarContexto(): AudioContext | null {
   try {
+    if (contexto?.state === 'closed') contexto = null
     if (!contexto) {
       const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
       if (!Ctor) return null
       contexto = new Ctor()
       salida = contexto.createGain()
-      salida.gain.value = volumen * 0.5
-      salida.connect(contexto.destination)
+      salida.gain.value = volumen * REFUERZO
+      const limitador = contexto.createDynamicsCompressor()
+      limitador.threshold.value = -10
+      limitador.knee.value = 6
+      limitador.ratio.value = 12
+      limitador.attack.value = 0.002
+      limitador.release.value = 0.12
+      salida.connect(limitador).connect(contexto.destination)
     }
-    if (contexto.state === 'suspended') void contexto.resume()
+    // 'suspended' (sin gesto, pestaña oculta) o 'interrupted' (iPhone: llamada, bloqueo, micrófono).
+    if (contexto.state !== 'running') void contexto.resume().catch(() => {})
     return contexto
   } catch {
     return null
   }
 }
+
+type SesionAudio = { type: string }
+
+function fijarSesion(tipo: 'playback' | 'play-and-record'): void {
+  try {
+    const sesion = (navigator as Navigator & { audioSession?: SesionAudio }).audioSession
+    if (sesion) sesion.type = tipo
+  } catch {
+    /* navegador sin audioSession */
+  }
+}
+
+/** Antes de pedir el micrófono (soplar las velas): el iPhone necesita grabar y reproducir a la vez. */
+export function prepararMicrofono(): void {
+  fijarSesion('play-and-record')
+}
+
+/**
+ * Al soltar el micrófono, el iPhone deja el audio por el auricular de llamadas (muy bajito) o
+ * interrumpido. Se vuelve al modo normal y se descarta el contexto: el siguiente sonido crea uno nuevo.
+ */
+export function liberarMicrofono(): void {
+  fijarSesion('playback')
+  const viejo = contexto
+  contexto = null
+  salida = null
+  ruido = null
+  void viejo?.close().catch(() => {})
+}
+
+/**
+ * Celular: sin esto Web Audio se calla con el interruptor de silencio del iPhone, y el audio se queda
+ * en pausa tras bloquear la pantalla o cambiar de app. Cada toque lo vuelve a poner en marcha.
+ */
+function prepararAudioMovil(): void {
+  fijarSesion('playback')
+  const despertar = () => {
+    if (!activo) return
+    const ctx = asegurarContexto()
+    if (!ctx || ctx.state === 'running') return
+    // Un instante de silencio dentro del gesto deja el contexto listo para los sonidos con retraso.
+    try {
+      const fuente = ctx.createBufferSource()
+      fuente.buffer = ctx.createBuffer(1, 1, ctx.sampleRate)
+      fuente.connect(ctx.destination)
+      fuente.start()
+    } catch {
+      /* sin sonido, sin drama */
+    }
+  }
+  ;['pointerdown', 'touchend', 'keydown'].forEach((e) => window.addEventListener(e, despertar, { capture: true, passive: true }))
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && contexto && contexto.state !== 'running') void contexto.resume().catch(() => {})
+  })
+}
+
+if (typeof window !== 'undefined') prepararAudioMovil()
 
 function bufferRuido(ctx: AudioContext): AudioBuffer {
   if (ruido) return ruido
@@ -160,7 +231,7 @@ export function sonar(efecto: Efecto): void {
         break
       case 'tapa':
         // Tapa que salta: golpe sordo + pop.
-        tono(ctx, salida, t, { tipo: 'sine', desde: 180, hasta: 60, dur: 0.16, vol: 0.45 })
+        tono(ctx, salida, t, { tipo: 'triangle', desde: 220, hasta: 80, dur: 0.16, vol: 0.45 })
         tono(ctx, salida, t + 0.04, { tipo: 'sine', desde: 700, hasta: 220, dur: 0.12, vol: 0.3 })
         break
       case 'redoble':

@@ -63,6 +63,7 @@ export interface Contenido2026 {
     notas: Texto[]
     botonLeerNota: Texto
     botonVerFoto: Texto
+    notaDesliza: Texto
     stickerTocame: Texto
     fotoNoCarga: Texto
   }
@@ -151,6 +152,7 @@ export function crearContenido(T: Constantes2026): Contenido2026 {
       notas: T.NOTAS,
       botonLeerNota: T.MUNDO.botonLeerNota,
       botonVerFoto: T.MUNDO.botonVerFoto,
+      notaDesliza: T.MUNDO.notaDesliza,
       stickerTocame: T.MUNDO.stickerTocame,
       fotoNoCarga: T.MUNDO.fotoNoCarga,
     },

@@ -77,6 +77,8 @@ export const MUNDO = {
   pistaFotos: 'Toca una foto para verla en grande y darle la vuelta.',
   botonLeerNota: 'Leer la nota',
   botonVerFoto: 'Ver la foto',
+  /** Aviso al pie de una nota larga (en el celular): hay más texto si deslizas. */
+  notaDesliza: 'Desliza para leer más',
   /** Letrita debajo de cada sticker antes de despegarlo. */
   stickerTocame: 'tócame',
   fotoNoCarga: 'No se pudo cargar esta foto',

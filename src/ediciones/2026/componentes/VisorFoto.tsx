@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
 import { Texto } from '../../../compartido/Texto'
 import { textoPlano } from '../../../compartido/pendiente'
 import { sonar } from '../../../compartido/sonido'
@@ -11,7 +11,28 @@ interface Props {
   /** Índice abierto, o `null` si el visor está cerrado. */
   indice: number | null
   alCambiar: (indice: number | null) => void
-  textos: { leerNota: string; verFoto: string; fotoNoCarga: string }
+  textos: { leerNota: string; verFoto: string; fotoNoCarga: string; desliza: string }
+}
+
+/** `true` mientras la nota tenga texto escondido más abajo (y aún no se haya llegado al final). */
+function useHayMasAbajo(caja: RefObject<HTMLElement | null>, activo: boolean) {
+  const [hayMas, setHayMas] = useState(false)
+  useEffect(() => {
+    const el = caja.current
+    if (!el || !activo) return setHayMas(false)
+    const medir = () => setHayMas(el.scrollHeight - el.clientHeight - el.scrollTop > 8)
+    medir()
+    const ro = new ResizeObserver(medir)
+    ro.observe(el)
+    for (const hijo of el.children) ro.observe(hijo)
+    el.addEventListener('scroll', medir, { passive: true })
+    void document.fonts?.ready.then(medir)
+    return () => {
+      ro.disconnect()
+      el.removeEventListener('scroll', medir)
+    }
+  }, [caja, activo])
+  return hayMas
 }
 
 /** Foto en grande; se voltea para leer la nota de detrás. Usa <dialog> nativo (foco y Escape). */
@@ -19,6 +40,8 @@ export function VisorFoto({ fotos, indice, alCambiar, textos }: Props) {
   const dialogo = useRef<HTMLDialogElement>(null)
   const [volteada, setVolteada] = useState(false)
   const foto = indice === null ? null : fotos[indice]
+  const reverso = useRef<HTMLDivElement>(null)
+  const hayMas = useHayMasAbajo(reverso, volteada && indice !== null)
 
   useEffect(() => {
     const d = dialogo.current
@@ -80,13 +103,26 @@ export function VisorFoto({ fotos, indice, alCambiar, textos }: Props) {
                 <FotoMarco foto={foto} numero={indice + 1} ajuste="contain" textoFallo={textos.fotoNoCarga} />
                 {foto.src && <span className="solo-lectores">{textoPlano(foto.alt, '')}</span>}
               </button>
-              <div className={`${estilos.cara} ${estilos.reverso}`} aria-hidden={!volteada}>
+              <div ref={reverso} className={`${estilos.cara} ${estilos.reverso}`} aria-hidden={!volteada}>
                 <p className={estilos.reversoPie}>
                   <Texto valor={foto.pie} />
                 </p>
                 <p className={estilos.reversoNota}>
                   <Texto valor={foto.nota} />
                 </p>
+                {/* Pista para el celular: la nota sigue más abajo. Tocarla también baja. */}
+                <button
+                  type="button"
+                  className={estilos.desliza}
+                  data-visible={hayMas}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  onClick={() => reverso.current?.scrollBy({ top: reverso.current.clientHeight * 0.7, behavior: 'smooth' })}
+                >
+                  <span>
+                    {textos.desliza} <b>↓</b>
+                  </span>
+                </button>
               </div>
             </div>
           </div>
